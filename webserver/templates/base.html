@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="{{ url_for('static', filename="css/bootstrap.min.css") }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename="css/mycss.css") }}" rel="stylesheet">
+    <script src="{{ url_for('static', filename="js/jquery-1.11.2.min.js") }}"></script>
+    <script src="{{ url_for('static', filename="js/bootstrap.min.js") }}"></script>
+
+    <title>repRNA</title>
+</head>
+<body>
+    <div class="jumbotron">
+        <div class="container">
+{#            <img src="{{ url_for('static', filename="pic/test.png") }}" class="img-responsive" align="texttop">#}
+            <h1>repRNA</h1>
+            <p>A web server for generating various modes of RNA sequences</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <nav class="navbar navbar-inverse" role="navigation">
+            <div class="container-fluid">
+
+                <div class="navbar-header">
+                      <a class="navbar-brand" href="{{ url_for('home') }}">Home</a>
+                </div>
+
+                {% block navbar %}{% endblock %}
+
+            </div><!-- /.container-fluid -->
+        </nav>
+        {% block content %}{% endblock %}
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+.jumbotron
+{
+    background-image: url('../pic/background.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
