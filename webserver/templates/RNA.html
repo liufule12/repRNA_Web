@@ -12,9 +12,6 @@
 {% endblock %}
 
 {% block content %}
-
-
-
     <div class="panel panel-primary">
         <div class="panel-heading">
             Select or input the following parameters
@@ -25,7 +22,7 @@
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Mode:</label>
                         <div class="btn-group col-lg-3">
-                            <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                                 {{ mode }} <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
@@ -34,7 +31,7 @@
                                 <li><a href="/RNA/DCC/">DCC</a></li>
                                 <li><a href="/RNA/DACC/">DACC</a></li>
                                 <li><a href="/RNA/Triplet/">Triplet</a></li>
-                                <li><a href="/RNA/iMcRNA/">iMcRNA</a></li>
+                                <li><a href="/RNA/iMcRNA-PseSSC/">iMcRNA-PseSSC</a></li>
                                 <li><a href="/RNA/iMiRNA-PseDPC/">iMiRNA-PseDPC</a></li>
                                 <li><a href="/RNA/PC-PseDNC-General/">PC-PseDNC-General</a></li>
                                 <li><a href="/RNA/SC-PseDNC-General/">SC-PseDNC-General</a></li>
@@ -47,8 +44,26 @@
                     {% if mode == 'kmer' %}
                         <div class="form-group">
                             <label class="col-sm-2 control-label">k:</label>
-                            <div class="col-sm-1">
-                                <input type="number" class="form-control" name="k">
+                            <div class="col-sm-2">
+                                <input type="number" class="form-control" placeholder="k input" name="k">
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if mode == 'iMcRNA-PseSSC' %}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">n:</label>
+                            <div class="col-sm-2">
+                                <input type="number" class="form-control" placeholder="n input" name="n">
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if mode == 'iMiRNA-PseDPC' %}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">d:</label>
+                            <div class="col-sm-2">
+                                <input type="number" class="form-control" placeholder="d input" name="d">
                             </div>
                         </div>
                     {% endif %}
@@ -56,84 +71,93 @@
                     {% if mode == 'DAC' or mode == 'DCC' or mode == 'DACC' or mode == 'PC-PseDNC-General' or mode == 'SC-PseDNC-General' %}
                         <div class="form-group">
                             <label class="col-sm-2 control-label">Physicochemical properties:</label>
-                            <div class="col-sm-offset-8 col-sm-2">
-                                <div class="btn-group btn-group-xs">
-                                    <button type="button" class="btn btn-default">All</button>
-                                    <button type="button" class="btn btn-default">Reverse</button>
-                                    <button type="button" class="btn btn-default">None</button>
-                                </div>
-                            </div>
-
-                            <div class="checkbox col-sm-10">
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-default">Slide (RNA)</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">Adenine content</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-success">Hydrophilicity (RNA)</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-info">Tilt (RNA)</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-warning">Stacking energy (RNA)</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-danger">Twist (RNA)</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">Entropy (RNA)</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">Roll (RNA)</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">Purine (AG) content</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">Hydrophilicity (RNA)1</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">Enthalpy (RNA)1</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">GC content</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">Entropy (RNA)1</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">Rise (RNA)</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">Free energy (RNA)</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">Keto (GT) content</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">Free energy (RNA)1</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">Enthalpy (RNA)</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">Guanine content</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">Shift (RNA)</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">Cytosine content</span>
-                                </label>
-                                <label class="control-label">
-                                    <input type="checkbox" name="check1"><span class="label label-primary">Thymine content</span>
-                                </label>
+                            <div class="col-sm-10 table-responsive">
+                                <table class="table table-bordered">
+                                    <tr>
+                                        <td><label><input type="checkbox" name="Slide (RNA)"><span class="label label-primary">Slide (RNA)</span></label></td>
+                                        <td><label><input type="checkbox" name="Adenine content"><span class="label label-primary">Adenine content</span></label></td>
+                                        <td><label><input type="checkbox" name="Hydrophilicity (RNA)"><span class="label label-primary">Hydrophilicity (RNA)</span></label></td>
+                                        <td><label><input type="checkbox" name="Tilt (RNA)"><span class="label label-primary">Tilt (RNA)</span></label></td>
+                                        <td><label><input type="checkbox" name="Stacking energy (RNA)"><span class="label label-primary">Stacking energy (RNA)</span></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label><input type="checkbox" name="Twist (RNA)"><span class="label label-primary">Twist (RNA)</span></label></td>
+                                        <td><label><input type="checkbox" name="Entropy (RNA)"><span class="label label-primary">Entropy (RNA)</span></label></td>
+                                        <td><label><input type="checkbox" name="Entropy (RNA)1"><span class="label label-primary">Entropy (RNA)1</span></label></td>
+                                        <td><label><input type="checkbox" name="Guanine content"><span class="label label-primary">Guanine content</span></label></td>
+                                        <td><label><input type="checkbox" name="Shift (RNA)"><span class="label label-primary">Shift (RNA)</span></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label><input type="checkbox" name="Roll (RNA)"><span class="label label-primary">Roll (RNA)</span></label></td>
+                                        <td><label><input type="checkbox" name="Purine (AG) content"><span class="label label-primary">Purine (AG) content</span></label></td>
+                                        <td><label><input type="checkbox" name="Hydrophilicity (RNA)1"><span class="label label-primary">Hydrophilicity (RNA)1</span></label></td>
+                                        <td><label><input type="checkbox" name="Enthalpy (RNA)1"><span class="label label-primary">Enthalpy (RNA)1</span></label></td>
+                                        <td><label><input type="checkbox" name="GC content"><span class="label label-primary">GC content</span></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label><input type="checkbox" name="Rise (RNA)"><span class="label label-primary">Rise (RNA)</span></label></td>
+                                        <td><label><input type="checkbox" name="Free energy (RNA)"><span class="label label-primary">Free energy (RNA)</span></label></td>
+                                        <td><label><input type="checkbox" name="Keto (GT) content"><span class="label label-primary">Keto (GT) content</span></label></td>
+                                        <td><label><input type="checkbox" name="Free energy (RNA)1"><span class="label label-primary">Free energy (RNA)1</span></label></td>
+                                        <td><label><input type="checkbox" name="Enthalpy (RNA)"><span class="label label-primary">Enthalpy (RNA)</span></label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><label><input type="checkbox" name="Cytosine content"><span class="label label-primary">Cytosine content</span></label></td>
+                                        <td><label><input type="checkbox" name="Thymine content"><span class="label label-primary">Thymine content</span></label></td>
+                                        <td><button type="button" class="btn btn-success btn-sm btn-block" onclick="checkAll()">All</button></td>
+                                        <td><button type="button" class="btn btn-success btn-sm btn-block" onclick="checkRev()">Reverse</button></td>
+                                        <td><button type="button" class="btn btn-success btn-sm btn-block" onclick="checkNone()">None</button></td>
+                                    </tr>
+                                </table>
+{#                                        <button type="button" class="btn btn-success btn-sm " onclick="checkAll()">All</button>#}
+{#                                        <button type="button" class="btn btn-success btn-sm " onclick="checkRev()">Reverse</button>#}
+{#                                        <button type="button" class="btn btn-success btn-sm " onclick="checkNone()">None</button>#}
                             </div>
                         </div>
                     {% endif %}
+
+                    {% if mode == 'DAC' or mode == 'DCC' or mode == 'DACC' %}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">lag:</label>
+                            <div class="col-sm-2">
+                                <input type="number" class="form-control" placeholder="lag input" name="lag">
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if mode == 'iMcRNA-PseSSC' or mode == 'iMiRNA-PseDPC' or mode == 'PC-PseDNC-General' or mode == 'SC-PseDNC-General' %}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">lambda:</label>
+                            <div class="col-sm-2">
+                                <input type="number" class="form-control" placeholder="lambda input" name="lamada">
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if mode == 'iMcRNA-PseSSC' or mode == 'iMiRNA-PseDPC' or mode == 'PC-PseDNC-General' or mode == 'SC-PseDNC-General' %}
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">w:</label>
+                            <div class="col-sm-2">
+                                <input type="number" class="form-control" placeholder="w input" name="w">
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <div class="col-sm-7">
+                            <label>Enter the query RNA sequences in FASTA <a href="#" target="_blank">(?)</a> format (maximum 100 for each submission) :</label>
+                            <textarea class="form-control" placeholder="Sequences input" rows="3"></textarea>
+                        </div>
+                        <div class="col-sm-5">
+                            <label>Upload a file in FASTA <a href="#" target="_blank">(?)</a> format (maximum 100 for each submission):</label>
+                            <input type="file" >
+                        </div>
+                    </div>
+
+                    <div class="col-sm-offset-5">
+                        <button type="submit" class="btn btn-primary btn-lg">Submit</button>
+                        <button type="reset" class="btn btn-primary btn-lg">Reset</button>
+                    </div>
 
                 </form>
     </div>
