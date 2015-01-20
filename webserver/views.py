@@ -2,6 +2,8 @@ from webserver import app
 
 from flask import Flask, render_template, redirect, request
 
+import webserver._method as _method
+
 
 @app.route('/')
 @app.route('/home/')
@@ -43,5 +45,17 @@ def contact():
 def main(mode):
     if request.method == 'GET':
         return render_template("RNA.html", mode=mode)
+    if request.method == 'POST':
+        print("request.form", request.form)
+        print("request.files", request.files)
 
+        # Check and transform the form args.
+        check_res = _method.tran_args(request.form, mode)
+        if check_res[0] is False:
+            return render_template('result.html', er_info=(True, check_res[1]))
+        else:
+            form_args = check_res[1]
+        print("Args is ok.")
+
+        return "Process in main completed."
 
