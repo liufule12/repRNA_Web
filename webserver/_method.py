@@ -31,81 +31,34 @@ def get_ind_names(filename):
 
 
 def tran_args(form, mode):
-    """Transform the args type."""
+    """transform the args to dict and add parameter k."""
     print("Tran_args", form, mode)
     args = {}
 
     # Transform k.
     if mode == 'Kmer':
-        k = int(form['k'])
-        if k < 1 or k > 6:
-            return False, "Error: The value of k must be an integer and larger than 0 and small than 7."
-        else:
-            args['k'] = k
+        args['k'] = int(form['k'])
     if mode in const.METHODS_PHYCHE_INDEX:
         args['k'] = 2
 
     # Transform lag.
     if mode in const.METHODS_LAG:
-        try:
-            lag = int(form['lag'])
-        except ValueError:
-            return False, "Error: The value of lag must be an integer larger than 0 and smaller than " \
-                          "the length of the longest input sequence - lag."
-
-        if lag < 0:
-            return False, "Error: The value of lag must be an integer larger than 0 and smaller than " \
-                          "the length of the longest input sequence - lag."
-        else:
-            args['lag'] = lag
+        args['lag'] = int(form['lag'])
 
     # Transform n.
     if mode == 'PseSSC':
-        try:
-            n = int(form['n'])
-        except ValueError:
-            return False, "Error: n error information."
-
-        if n < 0:
-            return False, "Error: The value of lag must be an integer larger than 0 and n error information."
-        else:
-            args['n'] = n
+        args['n'] = int(form['n'])
 
     # Transform d.
     if mode == 'PseDPC':
-        try:
-            d = int(form['d'])
-        except ValueError:
-            return False, "Error: d error information."
-
-        if d < 0:
-            return False, "Error: The value of lag must be an integer larger than 0 and n error information."
-        else:
-            args['d'] = d
+        args['d'] = int(form['d'])
 
     # Transform lamada, w.
     if mode in const.METHODS_LAMADA_W:
-        try:
-            lamada = int(form['lamada'])
-        except ValueError:
-            return False, "Error: The value of lambda must be an integer larger than 0 and smaller than " \
-                          "the length of the longest input sequence - lambda."
+        args['lamada'] = int(form['lamada'])
+        args['w'] = float(form['w'])
 
-        try:
-            w = float(form['w'])
-        except ValueError:
-            return False, "Error: The value of w must be no less than 0 and no larger than 1."
-
-        if lamada < 0:
-            return False, "Error: The value of lambda must be an integer larger than 0 and smaller than " \
-                          "the length of the longest input sequence - lambda."
-        elif w < 0 or w > 1:
-            return False, "Error: The value of w must be no less than 0 and no larger than 1."
-        else:
-            args['lamada'] = lamada
-            args['w'] = w
-
-    return True, args
+    return args
 
 
 def check_user_data(category, method, request, form_args, input_file, write_file):
