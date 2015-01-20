@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block navbar %}
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <li><a href="{{ url_for('server') }}">Server</a></li>
+            <li><a href="{{ url_for('tutorial') }}">Tutorial</a></li>
+            <li><a href="{{ url_for('download') }}">Download</a></li>
+            <li><a href="{{ url_for('citation') }}">Citation</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact us</a></li>
+        </ul>
+    </div><!-- /.navbar-collapse -->
+{% endblock %}
+
+{% block content %}
+    {% if er_info[0] == True %}
+        <div class="alert alert-danger alert-dismissible fade in" role="alert">
+            <h4>Oh snap! You got an error!</h4>
+            <p>{{ er_info[1] }}</p>
+            <p>
+                <button type="button" class="btn btn-danger" onclick="javascript: window.history.back()">Back</button>
+            </p>
+        </div>
+    {% endif %}
+{% endblock %}
