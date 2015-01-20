@@ -20,9 +20,15 @@
             <div class="tab-content">
                 <form class="form-horizontal" role="form" method="post">
                     <!-- Parameter: mode -->
-                    <div class="form-group">
-                        <label class="col-sm-1 text-left"><em>Mode </em><span class="glyphicon glyphicon-question-sign"></span>:</label>
-                        <div class="btn-group col-sm-offset-1 col-sm-3">
+                    <div class="form-group" >
+{#                        <label id="popover_mode" class="col-sm-1 text-left"><em>Mode </em><span class="glyphicon glyphicon-question-sign"></span>:</label>#}
+                        <label class="col-sm-2 text-left">
+                            <a id="tooltip_mode" data-toggle="tooltip" data-placement="left" title="The repRNA is able to generate totally 9 different modes for RNA data">
+                                <em>Mode </em><span class="glyphicon glyphicon-question-sign"></span>
+                            </a>
+                            :
+                        </label>
+                        <div class="btn-group col-sm-3">
                             <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
                                 {{ mode }} <span class="caret"></span>
                             </button>
@@ -43,8 +49,14 @@
                     <!-- Parameter: k -->
                     {% if mode == 'kmer' %}
                         <div class="form-group">
-                            <label class="col-sm-1 text-left"><em>k</em>:</label>
-                            <div class="col-sm-offset-1 col-sm-2">
+                            <label class="col-sm-2 text-left">
+                                <a id="tooltip_k" data-toggle="tooltip" data-placement="left" title="k is the number of neighboring nucleic acids">
+                                    <em>k </em>
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </a>
+                                :
+                            </label>
+                            <div class="col-sm-2">
                                 <input type="number" class="form-control" placeholder="k input" name="k">
                             </div>
                         </div>
@@ -53,8 +65,14 @@
                     <!-- Parameter: n -->
                     {% if mode == 'PseSSC' %}
                         <div class="form-group">
-                            <label class="col-sm-1 text-leftl"><em>n</em>:</label>
-                            <div class="col-sm-offset-1 col-sm-2">
+                            <label class="col-sm-2 text-left">
+                                <a id="tooltip_n" data-toggle="tooltip" data-placement="left" title="n reflects the local or short-range structure-order effect">
+                                    <em>n</em>
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </a>
+                                :
+                            </label>
+                            <div class="col-sm-2">
                                 <input type="number" class="form-control" placeholder="n input" name="n">
                             </div>
                         </div>
@@ -63,8 +81,14 @@
                     <!-- Parameter: d -->
                     {% if mode == 'PseDPC' %}
                         <div class="form-group">
-                            <label class="col-sm-1 text-left"><em>d</em>:</label>
-                            <div class="col-sm-offset-1 col-sm-2">
+                            <label class="col-sm-2 text-left">
+                                <a id="tooltip_d" data-toggle="tooltip" data-placement="left" title="d reflects the local or short-range structure status order effects">
+                                    <em>d </em>
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </a>
+                                :
+                            </label>
+                            <div class="col-sm-2">
                                 <input type="number" class="form-control" placeholder="d input" name="d">
                             </div>
                         </div>
@@ -73,8 +97,14 @@
                     <!-- Parameter: lag -->
                     {% if mode == 'DAC' or mode == 'DCC' or mode == 'DACC' %}
                         <div class="form-group">
-                            <label class="col-sm-1 text-left"><em>lag</em>:</label>
-                            <div class="col-sm-offset-1 col-sm-2">
+                            <label class="col-sm-2 text-left">
+                                <a id="tooltip_lag" data-toggle="tooltip" data-placement="left" title="lag represents the distance between two oligomers along a RNA sequence">
+                                    <em>lag </em>
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </a>
+                                :
+                            </label>
+                            <div class="col-sm-2">
                                 <input type="number" class="form-control" placeholder="lag input" name="lag">
                             </div>
                         </div>
@@ -83,9 +113,21 @@
                     <!-- Parameter: lamada -->
                     {% if mode == 'PseSSC' or mode == 'PseDPC' or mode == 'PC-PseDNC-General' or mode == 'SC-PseDNC-General' %}
                         <div class="form-group">
-                            <label class="col-sm-1 text-left"><em>lambda</em>:</label>
-                            <div class="col-sm-offset-1 col-sm-2">
-                                <input type="number" class="form-control" placeholder="lambda input" name="lamada">
+                            <label class="col-sm-2 text-left">
+                                {% if mode == 'PseSSC' %}
+                                    <a id="tooltip_lamada" data-toggle="tooltip" data-placement="left" title="λ reflects the global or long-range structure‐order effect">
+                                {% elif mode == 'PseDPC' %}
+                                    <a id="tooltip_lamada" data-toggle="tooltip" data-placement="left" title="λ reflects the global or long-range structure status order effect">
+                                {% else %}
+                                    <a id="tooltip_lamada" data-toggle="tooltip" data-placement="left" title="λ is an integer, representing the highest counted rank (or tier) of the correlation along a RNA sequence">
+                                {% endif %}
+                                    <em>λ</em>
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </a>
+                                :
+                            </label>
+                            <div class="col-sm-2">
+                                <input type="number" class="form-control" placeholder="λ input" name="lamada">
                             </div>
                         </div>
                     {% endif %}
@@ -93,8 +135,18 @@
                     <!-- Parameter: w -->
                     {% if mode == 'PseSSC' or mode == 'PseDPC' or mode == 'PC-PseDNC-General' or mode == 'SC-PseDNC-General' %}
                         <div class="form-group">
-                            <label class="col-sm-1 text-left"><em>w</em>:</label>
-                            <div class="col-sm-offset-1 col-sm-2">
+                            <label class="col-sm-2 text-left">
+                                {% if mode == 'PseSSC' or mode == 'PseDPC' %}
+                                    <a id="tooltip_w" data-toggle="tooltip" data-placement="left" title="w is the factor to adjust the weight between the local and global effects">
+                                {% else %}
+                                    <a id="tooltip_w" data-toggle="tooltip" data-placement="left" title="w is the weight factor ranging from 0 to 1">
+                                {% endif %}
+                                    <em>w</em>
+                                    <span class="glyphicon glyphicon-question-sign"></span>
+                                </a>
+                                :
+                            </label>
+                            <div class="col-sm-2">
                                 <input type="number" class="form-control" placeholder="w input" name="w">
                             </div>
                         </div>
@@ -169,6 +221,16 @@
                         <button class="btn btn-primary btn-lg">Example</button>
                     </div>
                 </form>
+
+                <script type="text/javascript">
+                    $('#tooltip_mode').tooltip();
+                    $('#tooltip_k').tooltip();
+                    $('#tooltip_n').tooltip();
+                    $('#tooltip_d').tooltip();
+                    $('#tooltip_lag').tooltip();
+                    $('#tooltip_lamada').tooltip();
+                    $('#tooltip_w').tooltip();
+                </script>
             </div>
         </div>
     </div>
