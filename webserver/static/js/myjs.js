@@ -16,10 +16,7 @@ function checkRev(){
     var indices = document.getElementsByTagName("input");
     for (var i = 0; i < indices.length; i++){
         if(indices[i].type == "checkbox")
-            if(indices[i].checked == true)
-                indices[i].checked = false;
-            else
-                indices[i].checked = true;
+            indices[i].checked = indices[i].checked != true;
     }
 }
 
@@ -33,14 +30,39 @@ function checkNone(){
 }
 
 
-//function checkFileExtend(filename){
-//    var extend = filename.split(".")[-1];
-//    alert(extend);
-//}
+function checkFileExtend(id){
+    // Check the upload file type, it must be txt or fasta type.
+    var filePath = document.getElementById(id).value;
+
+    if (filePath != ""){
+        var re = /(\\+)/g;
+        filePath = filePath.replace(re,"#");
+        var path_split = filePath.split("#");
+        var filename = path_split[path_split.length - 1];
+        var name_split = filename.split(".");
+        var extend = name_split[name_split.length - 1];
+        var extendAllowed = "txt, fasta";
+        var resIndex = extendAllowed.lastIndexOf(extend);
+        if (resIndex >= 0)
+            return true;
+        else{
+            alert("The upload file must be txt or fasta type.");
+            if (id == "upload_data")
+                document.myForm.upload_data.focus();
+            else if (id == "upload_ind")
+                document.myForm.upload_ind.focus();
+
+            return false;
+        }
+    }
+
+    return true;
+}
 
 
 function formCheckArgs(mode)
 {
+    // Check parameter lag.
     if (mode == "DAC" || mode == "DCC" || mode == "DACC")
         if(document.myForm.lag.value == ""){
             alert("Please input the parameter lag!");
@@ -52,6 +74,7 @@ function formCheckArgs(mode)
             return false;
         }
 
+    // Check parameter λ, w.
     if (mode == "PseSSC" || mode == "PseDPC" || mode == "PC-PseDNC-General" || mode == "SC-PseDNC-General"){
         if (document.myForm.lamada.value == ""){
             alert("Please input the parameter λ!");
@@ -84,10 +107,28 @@ function formCheckArgs(mode)
         }
     }
 
-    //var filename = fileExtend(document.myForm.upload_data.value);
-    //alert(filename);
-    //var extend = filename.split(".")[-1];
-    //alert(extend);
+    // Check upload file format.
+    if (checkFileExtend("upload_data") == false)
+        return false;
+    try{
+        if (checkFileExtend("upload_ind") == false)
+            return false;
+    } catch (err){
+    }
 
-    return(true);
+    // Sequence input cannot be both null.
+    if (document.getElementById("rec_data").value == "" && document.getElementById("upload_data").value == ""){
+        alert("You must input the sequences in textarea or upload sequence file.");
+        document.myForm.rec_data.focus();
+        return false;
+    }
+
+    // Sequence input cannot be both true.
+    if (document.getElementById("rec_data").value != "" && document.getElementById("upload_data").value != ""){
+        alert("You cannot both input the sequences in textarea and upload sequence file.");
+        document.myForm.rec_data.focus();
+        return false;
+    }
+
+    return true;
 }
