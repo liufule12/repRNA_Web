@@ -17,7 +17,7 @@ def home():
 
 @app.route('/server/')
 def server():
-    return redirect("/RNA/kmer/")
+    return redirect("/RNA/Kmer/")
 
 
 @app.route('/tutorial.html')
@@ -64,10 +64,24 @@ def main(mode):
         print("The user fold is ok.")
 
         # Save the upload file.
-        rec_upload_file = _method.save_file('upload_data', user_dir)
-        rec_ind_file = _method.save_file('upload_ind', user_dir)
-        print(rec_upload_file, rec_ind_file)
+        data_file_path = _method.save_file('upload_data', user_dir)
+        ind_file_path = _method.save_file('upload_ind', user_dir)
         print("The user upload file is ok.")
+
+        # Check the user data and write the data file into user directory.
+        rec_data = request.form['rec_data']
+        if 0 != len(rec_data):
+            data_file = ""
+        else:
+            data_file = data_file_path
+
+        input_file = user_dir + '/' + 'input.txt'
+        check_res = _method.check_user_data(method=mode, request=request, form_args=form_args,
+                                            input_file=data_file, write_file=input_file)
+        if check_res[0] is False:
+            return render_template("result.html", er_info=(True, check_res[1]))
+        print("rec_data is ok.")
+
 
         return "Process in main completed."
 
