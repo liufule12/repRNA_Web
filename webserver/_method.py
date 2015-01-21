@@ -5,6 +5,8 @@ import shlex
 import subprocess
 
 import webserver.const as const
+from flask import request
+from werkzeug.utils import secure_filename
 
 
 def allowed_file(filename):
@@ -59,6 +61,16 @@ def tran_args(form, mode):
         args['w'] = float(form['w'])
 
     return args
+
+
+def save_file(filename, user_dir):
+    try:
+        rec_upload_file = request.files[filename]
+        upload_file = secure_filename(rec_upload_file.filename)
+        rec_upload_file.save(user_dir + '/' + upload_file)
+        return rec_upload_file
+    except:
+        return None
 
 
 def check_user_data(category, method, request, form_args, input_file, write_file):
