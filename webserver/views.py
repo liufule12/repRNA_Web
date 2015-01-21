@@ -3,7 +3,7 @@ import time
 
 from webserver import app
 from flask import Flask, render_template, redirect, request
-from werkzeug.utils import secure_filename
+
 from werkzeug.exceptions import RequestEntityTooLarge
 
 import webserver._method as _method
@@ -63,19 +63,11 @@ def main(mode):
         _method.create_user_fold(user_dir)
         print("The user fold is ok.")
 
-        # Deal with the upload data file.
-        rec_upload_file = request.files['upload_data']
-        print(rec_upload_file)
-        if rec_upload_file and _method.allowed_file(rec_upload_file.filename):
-            upload_file = secure_filename(rec_upload_file.filename)
-            upload_file_path = user_dir + '/' + upload_file
-            rec_upload_file.save(upload_file_path, buffer_size=1)
-        elif rec_upload_file and not _method.allowed_file(rec_upload_file.filename):
-            return render_template("result.html",
-                                   er_info=(True, "Sorry, the upload file must be txt or fasta file."))
-        else:
-            upload_file = None
-        print("The user upload data file is ok.")
+        # Save the upload file.
+        rec_upload_file = _method.save_file('upload_data', user_dir)
+        rec_ind_file = _method.save_file('upload_ind', user_dir)
+        print(rec_upload_file, rec_ind_file)
+        print("The user upload file is ok.")
 
         return "Process in main completed."
 
