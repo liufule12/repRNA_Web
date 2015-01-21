@@ -18,10 +18,9 @@
         </div>
         <div class="panel-body">
             <div class="tab-content">
-                <form class="form-horizontal" role="form" method="post">
+                <form class="form-horizontal" role="form" method="post" name="myForm" onsubmit="return(formCheckArgs('{{ mode }}'));" enctype="multipart/form-data">
                     <!-- Parameter: mode -->
                     <div class="form-group" >
-{#                        <label id="popover_mode" class="col-sm-1 text-left"><em>Mode </em><span class="glyphicon glyphicon-question-sign"></span>:</label>#}
                         <label class="col-sm-2 text-left">
                             <a id="tooltip_mode" data-toggle="tooltip" data-placement="left" title="The repRNA is able to generate totally 9 different modes for RNA data">
                                 <em>Mode </em><span class="glyphicon glyphicon-question-sign"></span>
@@ -219,7 +218,7 @@
 
                         <div class="form-group">
                             <p class="col-sm-5 text-left">(<strong>Optional</strong>) Upload a user-defined physicochemical index file(?): </p>
-                            <input type="file" name="upload_ind">
+                            <input type="file" id="upload_ind" name="upload_ind">
                         </div>
                     {% endif %}
 
@@ -227,11 +226,11 @@
                     <div class="form-group">
                         <div class="col-sm-7">
                             <label>Enter the query RNA sequences in FASTA <a href="#" target="_blank">(?)</a> format (maximum 100 for each submission) :</label>
-                            <textarea class="form-control" placeholder="Sequences input" rows="3"></textarea>
+                            <textarea id="rec_data" class="form-control" placeholder="Sequences input" rows="3" name="rec_data"></textarea>
                         </div>
                         <div class="col-sm-5">
                             <label>Or upload a file in FASTA <a href="#" target="_blank">(?)</a> format (maximum 100 for each submission):</label>
-                            <input type="file" >
+                            <input type="file" id="upload_data" name="upload_data">
                         </div>
                     </div>
 
@@ -242,6 +241,7 @@
                     </div>
                 </form>
 
+                <!-- tooltip init. -->
                 <script type="text/javascript">
                     $('#tooltip_mode').tooltip();
                     $('#tooltip_k').tooltip();
