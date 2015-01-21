@@ -67,43 +67,23 @@ def save_file(filename, user_dir):
     try:
         rec_upload_file = request.files[filename]
         upload_file = secure_filename(rec_upload_file.filename)
-        rec_upload_file.save(user_dir + '/' + upload_file)
-        return rec_upload_file
+        upload_file_path = user_dir + '/' + upload_file
+        rec_upload_file.save(upload_file_path)
+        return upload_file_path
     except:
         return None
 
 
-def check_user_data(category, method, request, form_args, input_file, write_file):
-    print("form_args:", form_args)
-    if category == const.DNA:
-        if method == 'Kmer' or method == 'RevKmer':
-            check_res = write_form_file(request.form['rec_data'], input_file, write_file, 0, const.ALPHABET_DNA)
-        elif method in const.DNA_PSE:
-            check_res = write_form_file(request.form['rec_data'], input_file, write_file, form_args['lamada'], const.ALPHABET_DNA)
-        elif method in const.DNA_ACC:
-            check_res = write_form_file(request.form['rec_data'], input_file, write_file, form_args['lag'], const.ALPHABET_DNA)
-        else:
-            print("check_user_data DNA error!")
-    elif category == const.RNA:
-        if method == 'Kmer':
-            check_res = write_form_file(request.form['rec_data'], input_file, write_file, 0, const.ALPHABET_RNA)
-        elif method in const.RNA_PSE:
-            check_res = write_form_file(request.form['rec_data'], input_file, write_file, form_args['lamada'], const.ALPHABET_RNA)
-        elif method in const.RNA_ACC:
-            check_res = write_form_file(request.form['rec_data'], input_file, write_file, form_args['lag'], const.ALPHABET_RNA)
-        else:
-            print("check_user_data RNA error!")
-    elif category == const.PROTEIN:
-        if method == 'Kmer':
-            check_res = write_form_file(request.form['rec_data'], input_file, write_file, 0, const.ALPHABET_PROTEIN)
-        elif method in const.PROTEIN_PSE:
-            check_res = write_form_file(request.form['rec_data'], input_file, write_file, form_args['lamada'], const.ALPHABET_PROTEIN)
-        elif method in const.PROTEIN_ACC:
-            check_res = write_form_file(request.form['rec_data'], input_file, write_file, form_args['lag'], const.ALPHABET_PROTEIN)
-        else:
-            print("check_user_data PROTEIN error!")
+def check_user_data(method, request, form_args, input_file, write_file):
+    print("form_args:", method, form_args, request.form['k'])
+    if method == 'Kmer':
+        check_res = write_form_file(request.form['rec_data'], input_file, write_file, form_args['k'], 0, const.ALPHABET_RNA)
+    elif method in const.METHODS_LAG:
+        check_res = write_form_file(request.form['rec_data'], input_file, write_file, form_args['k'], form_args['lag'], const.ALPHABET_RNA)
+    elif method in const.METHODS_LAMADA_W:
+        check_res = write_form_file(request.form['rec_data'], input_file, write_file, form_args['k'], form_args['lamada'], const.ALPHABET_RNA)
     else:
-        print("check_user_data error")
+        print("check_user_data RNA error!")
 
     return check_res
 
@@ -112,17 +92,12 @@ def is_alphabet(s, alphabet):
     """Check all element of line is under alphabet.
     """
     import re
-
-    if alphabet == const.ALPHABET_DNA and re.search(r'[^ACGTacgt]', s) is not None:
-        return False
-    elif alphabet == const.ALPHABET_RNA and re.search(r'[^ACGUacgu]', s) is not None:
-        return False
-    elif alphabet == const.ALPHABET_PROTEIN and re.search(r'[^ACDEFGHIKLMNPQRSTVWY]', s) is not None:
+    if alphabet == const.ALPHABET_RNA and re.search(r'[^ACGUacgu]', s) is not None:
         return False
     return True
 
 
-def write_form_file(receive_data, filename, write_path, lamada, alphabet):
+def write_form_file(receive_data, filename, write_path, k, lamada, alphabet):
     """Receive the receive_data or file, then judge the data is FASTA form or not.
     Input: way_choice, the textarea file or upload file, write_path, LAMADA.
 
@@ -187,15 +162,16 @@ def write_form_file(receive_data, filename, write_path, lamada, alphabet):
         # If there are only a sequence, but no >, then error!
         if count_seq < 1:
             return False, "Error, the sequence " + str(count_seq + 1) + " has not sequence name."
+        # len_seq must be >= k.
+        if len_seq < k:
+            return False, "Error, the sequence " + str(count_seq) + " must be larger and equal to k, where k is the length of the selected oligomer mode."
         # If the length of sequence is less than lamada, then error!
         if len_seq < lamada:
             return False, "Error, the sequence " + str(count_seq) + " parameter must be less than L-k, where L is the length of the query sequence and k is the length of the selected oligomer mode."
         # PseSSC seq count must be less than 50.
-        if (alphabet == const.ALPHABET_DNA or const.ALPHABET_RNA) and count_seq > const.MAX_DNA_NUM:
-            return False, "Error, the sequence number must be less than " + str(const.MAX_DNA_NUM) + "."
-        # Seqs numbers must be less than 10.
-        if alphabet == const.ALPHABET_PROTEIN and count_seq > const.MAX_PROTEIN_NUM:
-            return False, "Error, the sequence number must be less than " + str(const.MAX_PROTEIN_NUM) + "."
+        if (alphabet == const.ALPHABET_RNA) and count_seq > const.MAX_SEQ_NUM:
+            return False, "Error, the sequence number must be less than " + str(const.MAX_SEQ_NUM) + "."
+
     return True, None, None, count_seq
 
 
