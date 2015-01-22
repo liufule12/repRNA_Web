@@ -74,14 +74,14 @@ def save_file(filename, user_dir):
         return None
 
 
-def check_user_data(method, request, form_args, input_file, write_file):
-    print("form_args:", method, form_args, request.form['k'])
+def check_user_data(method, rec_data, form_args, input_file, write_file):
+    print("form_args:", method, form_args, form_args['k'])
     if method == 'Kmer':
-        check_res = write_form_file(request.form['rec_data'], input_file, write_file, form_args['k'], 0, const.ALPHABET_RNA)
+        check_res = write_form_file(rec_data, input_file, write_file, form_args['k'], 0, const.ALPHABET_RNA)
     elif method in const.METHODS_LAG:
-        check_res = write_form_file(request.form['rec_data'], input_file, write_file, form_args['k'], form_args['lag'], const.ALPHABET_RNA)
+        check_res = write_form_file(rec_data, input_file, write_file, form_args['k'], form_args['lag'], const.ALPHABET_RNA)
     elif method in const.METHODS_LAMADA_W:
-        check_res = write_form_file(request.form['rec_data'], input_file, write_file, form_args['k'], form_args['lamada'], const.ALPHABET_RNA)
+        check_res = write_form_file(rec_data, input_file, write_file, form_args['k'], form_args['lamada'], const.ALPHABET_RNA)
     else:
         print("check_user_data RNA error!")
 
@@ -175,89 +175,44 @@ def write_form_file(receive_data, filename, write_path, k, lamada, alphabet):
     return True, None, None, count_seq
 
 
-# def pse_process(category, method, args, input_file, ind_file):
-#     print("Pse_Process args", category, method, args, input_file)
-#
-#     if category == const.DNA:
-#         if method == 'Kmer':
-#             from pseALL.kmer import make_kmer_vector
-#             return make_kmer_vector(k=args['k'], alphabet=const.ALPHABET_DNA, filename=input_file)
-#         elif method == 'RevKmer':
-#             from pseALL.kmer import make_kmer_vector
-#             return make_kmer_vector(k=args['k'], alphabet=const.ALPHABET_DNA, filename=input_file, revcomp=True)
-#         elif method == 'PseDNC' or \
-#                 method == 'PC-PseDNC-General' or method == 'PC-PseTNC-General':
-#             from pseALL.pse import pseknc
-#             return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
-#                           phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_DNA)
-#         elif method == 'SC-PseDNC-General' or method == 'SC-PseTNC-General':
-#             from pseALL.pse import pseknc
-#             return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
-#                           phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_DNA, theta_type=2)
-#         elif method == 'PseKNC':
-#             from pseALL.pse import ipseknc
-#             return ipseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
-#                            phyche_list=args['props'], alphabet=const.ALPHABET_DNA)
-#         elif method == 'DAC' or method == 'TAC':
-#             from pseALL.acc import acc
-#             return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
-#                        phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_DNA)
-#         elif method == 'DCC' or method == 'TCC':
-#             from pseALL.acc import acc
-#             return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
-#                        phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_DNA, theta_type=2)
-#         elif method == 'DACC' or method == 'TACC':
-#             from pseALL.acc import acc
-#             return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
-#                        phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_DNA, theta_type=3)
-#     elif category == const.RNA:
-#         if method == 'Kmer':
-#             from pseALL.kmer import make_kmer_vector
-#             return make_kmer_vector(k=args['k'], alphabet=const.ALPHABET_RNA, filename=input_file)
-#         elif method == 'PC-PseDNC-General':
-#             from pseALL.pse import pseknc
-#             return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
-#                           phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA)
-#         elif method == 'SC-PseDNC-General':
-#             from pseALL.pse import pseknc
-#             return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
-#                           phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA, theta_type=2)
-#         elif method in const.RNA_ACC:
-#             from pseALL.acc import acc
-#             return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
-#                        phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA)
-#     elif category == const.PROTEIN:
-#         if method == 'Kmer':
-#             from pseALL.kmer import make_kmer_vector
-#             return make_kmer_vector(k=args['k'], alphabet=const.ALPHABET_PROTEIN, filename=input_file)
-#         elif method in const.PROTEIN_PSE:
-#             from pseALL.pse import pseknc
-#             return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
-#                           phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_PROTEIN)
-#         elif method in const.PROTEIN_ACC:
-#             from pseALL.acc import acc
-#             if method == 'AC':
-#                 return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
-#                            phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_PROTEIN)
-#             elif method == 'CC':
-#                 return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
-#                            phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_PROTEIN, theta_type=2)
-#             elif method == 'ACC':
-#                 return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
-#                            phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_PROTEIN, theta_type=3)
+def pse_process(method, args, input_file, ind_file):
+    print("Pse_Process args", method, args, input_file)
+
+    if method == 'Kmer':
+        from pseALL.kmer import make_kmer_vector
+        return make_kmer_vector(k=args['k'], alphabet=const.ALPHABET_RNA, filename=input_file)
+    elif method in const.METHODS_LAG:
+        from pseALL.acc import acc
+        return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
+                   phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA)
+    elif method == 'PC-PseDNC-General':
+        from pseALL.pse import pseknc
+        return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
+                      phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA)
+    elif method == 'SC-PseDNC-General':
+        from pseALL.pse import pseknc
+        return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
+                      phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA, theta_type=2)
+    elif method == 'PseSSC':
+        pass
+    elif method == 'PseDPC':
+        pass
+    else:
+        print("pse_process error!")
 
 
-def write_tab(category, method, args, _vecs, vecs_name, write_file):
+def write_tab(mode, args, _vecs, vecs_name, write_file):
     """Write the vectors into disk in tab format."""
     with open(write_file, 'w') as f:
         # Write the parameters.
-        if category == const.PROTEIN:
-            f.write("Data type: " + 'protein sequences\n')
-        elif category == const.DNA or category == const.RNA:
-            f.write("Data type: " + category + ' sequences\n')
-        f.write("Method: " + method + '\n')
+        f.write("Data type: RNA sequences\n")
+        f.write("Mode: " + mode + '\n')
         if 'k' in args:
             f.write('K: ' + str(args['k']) + '\n')
+        if 'n' in args:
+            f.write('N: ' + str(args['k']) + '\n')
+        if 'd' in args:
+            f.write('D: ' + str(args['k']) + '\n')
         if args['props']:
             f.write('Properties: ' + str(args['props']) + '\n')
         if args['ext_ind']:
