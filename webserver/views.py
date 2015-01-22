@@ -3,10 +3,11 @@ import time
 
 from webserver import app
 from flask import Flask, render_template, redirect, request
-
 from werkzeug.exceptions import RequestEntityTooLarge
 
 import webserver._method as _method
+import webserver.pseALL.util as util
+import webserver.const as const
 
 
 @app.route('/')
@@ -55,6 +56,7 @@ def main(mode):
 
         # Transform the form args and add parameter k.
         form_args = _method.tran_args(request.form, mode)
+        form_args['props'] = [e for e in request.form if e not in const.ARGS]
         print("Args is ok.", form_args)
 
         # Create the user fold.
@@ -66,6 +68,10 @@ def main(mode):
         # Save the upload file.
         data_file_path = _method.save_file('upload_data', user_dir)
         ind_file_path = _method.save_file('upload_ind', user_dir)
+        form_args['ext_ind'] = []
+        if ind_file_path is not None:
+            form_args['ext_ind'] = _method.get_ind_names(ind_file_path)
+        print(form_args['ext_ind'])
         print("The user upload file is ok.")
 
         # Check the user data and write the data file into user directory.
@@ -76,12 +82,35 @@ def main(mode):
             data_file = data_file_path
 
         input_file = user_dir + '/' + 'input.txt'
-        check_res = _method.check_user_data(method=mode, request=request, form_args=form_args,
+        check_res = _method.check_user_data(method=mode, rec_data=rec_data, form_args=form_args,
                                             input_file=data_file, write_file=input_file)
         if check_res[0] is False:
             return render_template("result.html", er_info=(True, check_res[1]))
         print("rec_data is ok.")
 
+        # Get sequences names.
+        seqs = util.get_data(input_data=open(input_file), alphabet="RNA", desc=True)
+        names = [seq.name for seq in seqs]
+        print(names)
+        print("seq names is ok.")
+
+        # Process.
+        try:
+            res = _method.pse_process(method=mode, args=form_args, input_file=input_file, ind_file=ind_file_path)
+        except:
+            if ind_file_path is not None:
+                return render_template("result.html",
+                                       er_info=(True, "The physicochemical indices file format error."))
+            raise
+
+        # Write the res in TAB format.
+        write_file = user_dir + '/res.txt'
+        download_path = 'temp/' + user_ip_time + '/res.txt'
+        _method.write_tab(mode=mode, args=form_args, vecs_name=names, _vecs=res, write_file=write_file)
+
+        print(res)
+        return render_template('result.html', er_info=(False, None), res=res, mode=mode, args=form_args, names=names,
+                               write_file=download_path, user_ip_time=user_ip_time)
 
         return "Process in main completed."
 
