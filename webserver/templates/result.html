@@ -12,6 +12,7 @@
 {% endblock %}
 
 {% block content %}
+    <!-- Error page. -->
     {% if er_info[0] == True %}
         <div class="alert alert-danger alert-dismissible fade in" role="alert">
             <h4>Oh snap! You got an error!</h4>
@@ -20,5 +21,141 @@
                 <button type="button" class="btn btn-danger" onclick="javascript: window.history.back()">Back</button>
             </p>
         </div>
+    <!-- Result page. -->
+    {% else %}
+        <button class="btn btn-primary btn-block btn-group-lg" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="true" aria-controls="collapseExample">
+            Parameter summary
+        </button>
+        <div class="collapse.in" id="collapseExample">
+            <table class="table table-bordered table-responsive col-sm-4" >
+                <tr>
+                    <td><i>Mode</i></td>
+                    <td>{{ mode }}</td>
+                </tr>
+                {% if method == 'Kmer' %}
+                    <tr>
+                        <td><i>k</i></td>
+                        <td>{{ args['k'] }}</td>
+                    </tr>
+                {% endif %}
+
+                {% if method == 'PseSSC' %}
+                    <tr>
+                        <td><i>n</i></td>
+                        <td>{{ args['n'] }}</td>
+                    </tr>
+                {% endif %}
+
+                {% if method == 'PseDPC' %}
+                    <tr>
+                        <td><i>d</i></td>
+                        <td>{{ args['d'] }}</td>
+                    </tr>
+                {% endif %}
+
+                {% if args['props'] != [] %}
+                    <tr>
+                        <td width="140px"><i>Physicochemical properties</i></td>
+                        <td>
+                            <table cellpadding="10px">
+                                <tr>
+                                    {% for prop in args['props'] %}
+                                        {% if loop.index0 % 5 == 0 %}
+                                            </tr>
+                                            <tr>
+                                        {% endif %}
+                                        <td>{{ prop }}</td>
+                                    {% endfor %}
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                {% endif %}
+
+                {% if args['ext_ind'] != [] %}
+                    <tr>
+                        <td><i>User-defined indices</i></td>
+                        <td>
+                            <table>
+                                <tr>
+                                    {% for ind in args['ext_ind'] %}
+                                        {% if loop.index0 % 5 == 0 %}
+                                            </tr>
+                                            <tr>
+                                        {% endif %}
+                                        <td>{{ ind }}</td>
+                                    {% endfor %}
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                {% endif %}
+
+                {% if 'lamada' in args %}
+                    <tr>
+                        <td><i>lambda</i></td>
+                        <td>{{ args['lamada'] }}</td>
+                    </tr>
+                {% endif %}
+
+                {% if 'w' in args %}
+                    <tr>
+                        <td><i>w</i></td>
+                        <td>{{ args['w'] }}</td>
+                    </tr>
+                {% endif %}
+            </table>
+        </div>
+
+        <h3>Results</h3>
+        <table>
+            <tr>
+                <td colspan="2"><p>These results can be downloaded as a text file (<a href="{{ url_for('static', filename=write_file) }}">download</a>).</p></td>
+            </tr>
+            <tr>
+                <td colspan="2"><p><strong>Note</strong>: The black numbers represent the values of the sequence compositions (i.e. amino acid, nucleotide, dinucleotide, or trinucleotide, etc), while the red numbers represent the values of sequence order correlation.</p></td>
+            </tr>
+            <tr>
+                <td align="center"><a href="javascript: window.history.back()">Continue</a></td>
+            </tr>
+            {% for vec in res %}
+                <tr>
+                    <td>><strong>{{ names[loop.index0] }}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onClick="window.open('http://219.223.244.143:5000/visual/{{ user_ip_time }}/{{ loop.index0 }}','','height=2000,width=2000,scrollbars=yes,status=yes')">Visualization</button></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>
+                        <table style="margin:0 auto; width:885px; line-height:25px;">
+                            <tr>
+                                {% for _res in vec %}
+                                    {% if loop.index0 % 10 == 0 and loop.index0 != 0 %}
+                                        </tr>
+                                        <tr>
+                                    {% endif %}
+                                    {% if 'lamada' in args %}
+                                        {% if  method == 'PseDNC' or method == 'PseKNC' or method == 'PC-PseDNC-General' or method == 'SC-PseDNC-General' or method == 'PC-PseTNC-General' or method == 'SC-PseTNC-General' %}
+                                            {% if loop.index0 >= 4 ** args['k'] %}
+                                                <td width="50px" style="color: #ff0000"><strong>{{ _res }}</strong></td>
+                                            {% else %}
+                                                <td width="50px">{{ _res }}</td>
+                                            {% endif %}
+                                        {% elif method == 'PC-PseAAC' or method == 'SC-PseAAC' or method == 'PC-PseAAC-General' or method == 'SC-PseAAC-General' %}
+                                            {% if loop.index0 >= 20 ** args['k'] %}
+                                                <td width="50px" style="color: #ff0000"><strong>{{ _res }}</strong></td>
+                                            {% else %}
+                                                <td width="50px">{{ _res }}</td>
+                                            {% endif %}
+                                        {% endif %}
+                                    {% else %}
+                                        <td width="10%">{{ _res }}</td>
+                                    {% endif %}
+                                {% endfor %}
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+
     {% endif %}
 {% endblock %}
