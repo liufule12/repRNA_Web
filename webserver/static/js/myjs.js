@@ -116,6 +116,25 @@ function formCheckArgs(mode)
     } catch (err){
     }
 
+    // Physicochemical properties and index file cannot be both null.
+    if (mode == "DAC" || mode == "DCC" || mode == "DACC" || mode == "PC-PseDNC-General" || mode == "SC-PseDNC-General"){
+        if (document.getElementById("upload_ind").value == ""){
+            var checked = false;
+            var indices = document.getElementsByTagName("input");
+            for (var i = 0; i < indices.length; i++){
+                if(indices[i].type == "checkbox" && indices[i].checked == true){
+                    checked = true;
+                    break;
+                }
+            }
+            if (checked == false){
+                alert("The physicochemical properties checkbox and user-defined physicochemical properties index file cannot be both null!");
+                document.myForm.upload_ind.focus();
+                return false;
+            }
+        }
+    }
+
     // Sequence input cannot be both null.
     if (document.getElementById("rec_data").value == "" && document.getElementById("upload_data").value == ""){
         alert("You must input the sequences in textarea or upload sequence file.");
