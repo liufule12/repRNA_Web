@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block navbar %}
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <li><a href="{{ url_for('server') }}">Server</a></li>
+            <li><a href="{{ url_for('tutorial') }}">Tutorial</a></li>
+            <li><a href="{{ url_for('download') }}">Download</a></li>
+            <li><a href="{{ url_for('citation') }}">Citation</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact us</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <span class="glyphicon glyphicon-eye-open"></span> Vector visualization
+            </h4>
+        </div>
+
+        <div class="panel-body">
+            <div class="row text-center vertical-middle-sm">
+                <img src="{{ url_for('static', filename=jpg_path) }}" class="img-rounded"/>
+            </div>
+
+            <p>{{ vec_name }}</p>
+            <table class="table col-sm-12 table-bordered">
+                <tr>
+                {% for _res in vec %}
+                    {% if loop.index0 != 0 and loop.index0 % 12 == 0 %}
+                        </tr>
+                        <tr>
+                    {% endif %}
+                    {% if 'lamada' in args %}
+                        {% if args['mode'] == 'PC-PseDNC-General' or args['mode'] == 'SC-PseDNC-General' %}
+                            {% if loop.index0 >= 4 ** args['k'] %}
+                                <td><strong>{{ _res }}</strong></td>
+                            {% else %}
+                                <td>{{ _res }}</td>
+                            {% endif %}
+                        {% endif %}
+                    {% else %}
+                        <td>{{ loop.index0 + 1 }}:{{ _res }}</td>
+                    {% endif %}
+                {% endfor %}
+                </tr>
+            </table>
+
+            <div class="row text-center vertical-middle-sm">
+                <button class="btn btn-primary btn-lg" onclick="window.close()"><span class="glyphicon glyphicon-remove"></span> Close</button>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
