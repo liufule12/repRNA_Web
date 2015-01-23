@@ -1,5 +1,8 @@
 import os
+import shlex
+import subprocess
 import time
+import pickle
 
 from webserver import app
 from flask import Flask, render_template, redirect, request
@@ -112,7 +115,51 @@ def main(mode):
         return render_template('result.html', er_info=(False, None), res=res, mode=mode, args=form_args, names=names,
                                write_file=download_path, user_ip_time=user_ip_time)
 
-        return "Process in main completed."
+
+@app.route("/visual/<user_ip_time>/<ind>/")
+def visual(user_ip_time, ind):
+    ind = int(ind)
+    args = {}
+    lines = []
+    user_dir = os.getcwd() + '/webserver/static/temp/' + user_ip_time
+    with open(user_dir + '/res.txt') as f:
+        lines = f.readlines()
+    for line_ind, line in enumerate(lines):
+        if line != '\n':
+            line = line.split(': ')
+            if line[0] == 'Data type':
+                args['category'] = line[1].rstrip().split(' ')[0]
+            elif line[0] == 'Mode':
+                args['mode'] = line[1].rstrip()
+            elif line[0] == 'K':
+                args['k'] = int(line[1])
+            elif line[0] == 'Lambda':
+                args['lamada'] = int(line[1])
+            continue
+        lines = lines[line_ind+1:]
+        break
+
+    # Find the visualization line.
+    vec_name = lines[ind * 2].rstrip()
+    vis_line = lines[ind * 2 + 1].rstrip().split('\t')
+    vis_line = [float(e) for e in vis_line]
+
+    # Plot heatmap.
+    vis_path = user_dir + '/vis.txt'
+    tar_vis_path = user_dir + '/vis.jpg'
+    with open(vis_path, 'wb') as f:
+        pickle.dump(vis_line, f)
+    try:
+        cmd = 'python webserver/heatmap_ale.py ' + vis_path + ' ' + tar_vis_path + ' ' +\
+              args['mode'] + ' ' + str(args['k']) + ' ' + str(args['lamada'])
+    except KeyError:
+        cmd = 'python webserver/heatmap_ale.py ' + vis_path + ' ' + tar_vis_path + ' ' +\
+              args['mode'] + ' ' + str(args['k'])
+    cmd_args = shlex.split(cmd)
+    subprocess.Popen(cmd_args).wait()
+
+    jpg_path = 'temp/' + user_ip_time + '/vis.jpg'
+    return render_template("visualization.html", jpg_path=jpg_path, ind=ind, vec=vis_line, vec_name=vec_name, args=args)
 
 
 @app.route("/test/")
