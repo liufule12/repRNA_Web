@@ -15,7 +15,7 @@
     <!-- Error page. -->
     {% if er_info[0] == True %}
         <div class="alert alert-danger alert-dismissible fade in" role="alert">
-            <h4>Oh snap! You got an error!</h4>
+            <h4><span class="glyphicon glyphicon-exclamation-sign"></span> Oh snap! You got an error!</h4>
             <p>{{ er_info[1] }}</p>
             <p>
                 <button type="button" class="btn btn-danger" onclick="window.history.back()">Back</button>
@@ -154,9 +154,11 @@
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                                 <strong>Dimensions: {{ vec|length }}</strong>
                                 &nbsp;&nbsp;&nbsp;&nbsp;
-                                <button class="btn btn-default btn-sm" onClick="window.open('http://219.223.244.143:5000/visual/{{ user_ip_time }}/{{ loop.index0 }}','','height=2000,width=2000,scrollbars=yes,status=yes')">
-                                    <span class="glyphicon glyphicon-eye-open"></span> Visualization
-                                </button>
+                                <a href="http://219.223.247.165:5000/visual/{{ user_ip_time }}/{{ loop.index0 }}" target="_blank">
+                                    <button class="btn btn-default btn-sm">
+                                        <span class="glyphicon glyphicon-eye-open"></span> Visualization
+                                    </button>
+                                </a>
                             </td>
                         </tr>
 
@@ -190,7 +192,7 @@
                 </table>
             </div>
             <div class="row text-center vertical-middle-sm">
-            <button class="btn btn-primary btn-lg" onclick="window.history.back()">Back</button>
+                <button class="btn btn-primary btn-lg" onclick="window.history.back()">Back</button>
             </div>
         </div>
 
