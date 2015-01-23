@@ -82,8 +82,8 @@
                         {% if args['props'] != [] %}
                             <div class="row">
                                 <label class="col-sm-2 text-left"><em>Physicochemical properties</em> :</label>
-                                <div class="col-sm-10">
-                                    <table class="table table-bordered table-responsive">
+                                <div class="col-sm-10 table-responsive">
+                                    <table class="table table-bordered">
                                         <tr>
                                             {% for prop in args['props'] %}
                                                 {% if loop.index0 % 5 == 0 %}
@@ -101,8 +101,8 @@
                         {% if args['ext_ind'] != [] %}
                             <div class="row">
                                 <label class="col-sm-2 text-left"><em>User-defined indices</em> :</label>
-                                <div class="col-sm-10">
-                                    <table class="table table-bordered table-responsive">
+                                <div class="col-sm-10 table-responsive">
+                                    <table class="table table-bordered">
                                         <tr>
                                             {% for ind in args['ext_ind'] %}
                                                 {% if loop.index0 % 5 == 0 %}
@@ -125,57 +125,74 @@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h4 class="panel-title">
-                    <a data-toggle="collapse" href="#collapseRes" aria-expanded="true" aria-controls="collapseRes"><span class="glyphicon glyphicon-list"></span> Results</a>
-                     &nbsp;&nbsp;&nbsp;<a href="{{ url_for('static', filename=write_file) }}" target="_blank"><span class="glyphicon glyphicon-download-alt"></span></a>
+                    <a data-toggle="collapse" href="#collapseRes" aria-expanded="true" aria-controls="collapseRes">
+                        <span class="glyphicon glyphicon-list"></span>
+                        Results
+                    </a>
+                    <span class="badge">{{ res|length }}</span>
+                     &nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{{ url_for('static', filename=write_file) }}" target="_blank"><span class="glyphicon glyphicon-download-alt"></span></a>
                 </h4>
             </div>
 
             <div id="collapseRes" class="panel-collapse collapse in">
                 <div class="panel-body">
                     <p><strong>Note</strong>: The black numbers represent the values of the sequence compositions (i.e. amino acid, nucleotide, dinucleotide, or trinucleotide, etc), while the red numbers represent the values of sequence order correlation.</p>
-                    <a href="javascript: window.history.back()">Continue</a>
                 </div>
             </div>
 
-            <table class="table-responsive table-bordered">
-                {% for vec in res %}
-                    <tr>
-                        <td>><strong>{{ names[loop.index0] }}</strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button onClick="window.open('http://219.223.244.143:5000/visual/{{ user_ip_time }}/{{ loop.index0 }}','','height=2000,width=2000,scrollbars=yes,status=yes')">Visualization</button></td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <table style="margin:0 auto; width:885px; line-height:25px;">
+            <!-- Result vectors -->
+            <div class="table-responsive">
+                <table class="table col-sm-12">
+                    <tbody>
+                    {% for vec in res %}
+                        <tr class="success">
+                            <td>
+                                <strong>{{ loop.index }}.</strong>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <strong>>{{ names[loop.index0] }}</strong>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <strong>Dimensions: {{ vec|length }}</strong>
+                                &nbsp;&nbsp;&nbsp;&nbsp;
+                                <button class="btn btn-default btn-sm" onClick="window.open('http://219.223.244.143:5000/visual/{{ user_ip_time }}/{{ loop.index0 }}','','height=2000,width=2000,scrollbars=yes,status=yes')">
+                                    <span class="glyphicon glyphicon-eye-open"></span> Visualization
+                                </button>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-sm-12">
+                            <table class="table col-sm-12 table-bordered">
                                 <tr>
-                                    {% for _res in vec %}
-                                        {% if loop.index0 % 10 == 0 and loop.index0 != 0 %}
-                                            </tr>
-                                            <tr>
-                                        {% endif %}
-                                        {% if 'lamada' in args %}
-                                            {% if  method == 'PseDNC' or method == 'PseKNC' or method == 'PC-PseDNC-General' or method == 'SC-PseDNC-General' or method == 'PC-PseTNC-General' or method == 'SC-PseTNC-General' %}
-                                                {% if loop.index0 >= 4 ** args['k'] %}
-                                                    <td width="50px" style="color: #ff0000"><strong>{{ _res }}</strong></td>
-                                                {% else %}
-                                                    <td width="50px">{{ _res }}</td>
-                                                {% endif %}
-                                            {% elif method == 'PC-PseAAC' or method == 'SC-PseAAC' or method == 'PC-PseAAC-General' or method == 'SC-PseAAC-General' %}
-                                                {% if loop.index0 >= 20 ** args['k'] %}
-                                                    <td width="50px" style="color: #ff0000"><strong>{{ _res }}</strong></td>
-                                                {% else %}
-                                                    <td width="50px">{{ _res }}</td>
-                                                {% endif %}
+                                {% for _res in vec %}
+                                    {% if loop.index0 != 0 and loop.index0 % 12 == 0 %}
+                                        </tr>
+                                        <tr>
+                                    {% endif %}
+                                    {% if 'lamada' in args %}
+                                        {% if mode == 'PC-PseDNC-General' or mode == 'SC-PseDNC-General' %}
+                                            {% if loop.index0 >= 4 ** args['k'] %}
+                                                <td><strong>{{ _res }}</strong></td>
+                                            {% else %}
+                                                <td>{{ _res }}</td>
                                             {% endif %}
-                                        {% else %}
-                                            <td width="10%">{{ _res }}</td>
                                         {% endif %}
-                                    {% endfor %}
+                                    {% else %}
+                                        <td>{{ loop.index0 + 1 }}:{{ _res }}</td>
+                                    {% endif %}
+                                {% endfor %}
                                 </tr>
                             </table>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="row text-center vertical-middle-sm">
+            <button class="btn btn-primary btn-lg" onclick="window.history.back()">Back</button>
+            </div>
         </div>
+
     {% endif %}
 {% endblock %}
