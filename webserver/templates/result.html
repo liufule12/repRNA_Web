@@ -143,7 +143,7 @@
 
             <!-- Result vectors -->
             <div class="table-responsive">
-                <table class="table col-sm-12">
+                <table class="table col-sm-10">
                     <tbody>
                     {% for vec in res %}
                         <tr class="success">
@@ -163,29 +163,17 @@
                         </tr>
 
                         <tr>
-                            <td class="col-sm-12">
-                            <table class="table col-sm-12 table-bordered">
+                            <td class="col-sm-10">
+                            <table class="table col-sm-10 table-bordered">
                                 <tr>
                                 {% for _res in vec %}
-                                    {% if loop.index0 != 0 and loop.index0 % 12 == 0 %}
+                                    {% if loop.index0 != 0 and loop.index0 % 10 == 0 %}
                                         </tr>
                                         <tr>
                                     {% endif %}
                                     {% if 'lamada' in args %}
-                                        {% if mode == 'PC-PseDNC-General' or mode == 'SC-PseDNC-General' %}
-                                            {% if loop.index0 >= 4 ** args['k'] %}
-                                                <td><strong>{{ _res }}</strong></td>
-                                            {% else %}
-                                                <td>{{ _res }}</td>
-                                            {% endif %}
-                                        {% elif mode == 'PseSSC' %}
-                                            {% if loop.index0 >= 10 ** args['k'] %}
-                                                <td><strong>{{ _res }}</strong></td>
-                                            {% else %}
-                                                <td>{{ _res }}</td>
-                                            {% endif %}
-                                        {% elif mode == 'PseDPC' %}
-                                            {% if loop.index0 >= 10 + 100 * args['k'] %}
+                                        {% if mode == 'PC-PseDNC-General' or mode == 'SC-PseDNC-General' or mode == 'PseSSC' or mode == 'PseDPC' %}
+                                            {% if loop.index0 >= (vec|length) - args['lamada'] %}
                                                 <td><strong>{{ _res }}</strong></td>
                                             {% else %}
                                                 <td>{{ _res }}</td>
