@@ -34,7 +34,6 @@ def get_ind_names(filename):
 
 def tran_args(form, mode):
     """transform the args to dict and add parameter k."""
-    print("Tran_args", form, mode)
     args = {}
 
     # Transform k.
@@ -74,7 +73,6 @@ def save_file(filename, user_dir):
 
 
 def check_user_data(method, rec_data, form_args, input_file, write_file):
-    print("form_args:", method, form_args, form_args['k'])
     if method == 'Kmer' or method == 'Triplet':
         check_res = write_form_file(rec_data, input_file, write_file, form_args['k'], 0, const.ALPHABET_RNA)
     elif method in const.METHODS_LAG:
@@ -117,7 +115,6 @@ def write_form_file(receive_data, filename, write_path, k, lamada, alphabet):
         has_seq = True
         for e in lines:
             e = e.strip()
-            # print e
             if 0 == len(e):
                 continue
             if '>' == e[0]:
@@ -175,18 +172,24 @@ def write_form_file(receive_data, filename, write_path, k, lamada, alphabet):
 
 
 def pse_process(method, args, input_file, ind_file, bracket_file, matched_file, vecs_file):
-    print("Pse_Process args", method, args, input_file)
-
     if method == 'Triplet':
         from pseALL.kmer import make_kmer_vector
         return make_kmer_vector(k=3, alphabet=const.ALPHABET_RNA, filename=input_file)
     elif method == 'Kmer':
         from pseALL.kmer import make_kmer_vector
         return make_kmer_vector(k=args['k'], alphabet=const.ALPHABET_RNA, filename=input_file)
-    elif method in const.METHODS_LAG:
+    elif method in 'DAC':
         from pseALL.acc import acc
         return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
                    phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA)
+    elif method in 'DCC':
+        from pseALL.acc import acc
+        return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
+                   phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA, theta_type=2)
+    elif method in 'DACC':
+        from pseALL.acc import acc
+        return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
+                   phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA, theta_type=3)
     elif method == 'PC-PseDNC-General':
         from pseALL.pse import pseknc
         return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
@@ -196,12 +199,10 @@ def pse_process(method, args, input_file, ind_file, bracket_file, matched_file, 
         return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
                       phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA, theta_type=2)
     elif method == 'PseSSC':
-        print(input_file, bracket_file)
         generate_bracket_seq(input_file, bracket_file)
         psessc(args, bracket_file, vecs_file)
         return read_tab_vecs(vecs_file)
     elif method == 'PseDPC':
-        print(input_file, matched_file, bracket_file)
         generate_bracket_seq(input_file, bracket_file)
         match_2st_has_name(bracket_file, matched_file)
         psedpc(args, matched_file, vecs_file)
@@ -222,7 +223,6 @@ def psessc(args, bracket_file, vecs_file):
     """ Call java jar to generate PseSSC vecs."""
     cmd = "java -jar " + const.MODEL_PSESSC_PATH + " " + str(args['k']) + " " + str(args['lamada']) + " " + str(float(args['w'] * 10)) +  \
           " " + bracket_file + " " + vecs_file
-    print(cmd)
     cmd_args = shlex.split(cmd)
     subprocess.Popen(cmd_args).wait()
 
@@ -231,7 +231,6 @@ def psedpc(args, bracket_file, vecs_file):
     """ Call java jar to generate PseDPC vecs."""
     cmd = "java -jar " + const.MODEL_PSEDPC_PATH + " " + str(args['k']) + " " + str(args['lamada']) + " " + str(float(args['w'] * 10)) +  \
           " " + bracket_file + " " + vecs_file
-    print('----------------------', cmd)
     cmd_args = shlex.split(cmd)
     subprocess.Popen(cmd_args).wait()
 
@@ -304,7 +303,6 @@ def read_tab_vecs(read_file):
 
 def write_tab(mode, args, _vecs, vecs_name, write_file):
     """Write the vectors into disk in tab format."""
-    print(args, mode)
     with open(write_file, 'w') as f:
         # Write the parameters.
         f.write("Data type: RNA sequences\n")
