@@ -3,10 +3,16 @@ __author__ = 'aleeee'
 import os
 import shlex
 import subprocess
+import sys
+import pickle
+import math
 
-import webserver.const as const
 from flask import request
 from werkzeug.utils import secure_filename
+import numpy as np
+import matplotlib.pyplot as plt
+
+import webserver.const as const
 
 
 def allowed_file(filename):
@@ -333,3 +339,80 @@ def write_tab(mode, args, _vecs, vecs_name, write_file):
             for val in vec[1:]:
                 f.write('\t' + str(val))
             f.write('\n')
+
+
+def heatmap(read_file, write_file, args):
+    with open(read_file, 'rb') as vis_f:
+        data = pickle.load(vis_f)
+        len_data = len(data)
+        line_num = int(math.ceil(math.sqrt(len_data)))
+
+        if args['mode'] in const.METHODS_PSE:
+            # Process the data.
+            tar_data = [0] * 2
+            spl_num = len_data - args['lamada']
+            per_num = spl_num / line_num
+            tar_data[0] = get_fir_data(data[:spl_num], per_num, line_num)
+            tar_data[1] = [data[spl_num:]]
+
+            # Plot the pic.
+            fig, axes = plt.subplots(nrows=2, ncols=1)
+
+            ax = axes.flat[0]
+            im = ax.imshow(tar_data[0], interpolation='nearest')
+            ax.set_title("Distribution of sequence composition values")
+            ax.axes.get_yaxis().set_visible(False)
+
+            bx = axes.flat[1]
+            im = bx.imshow(tar_data[1], interpolation='nearest')
+            bx.set_title("Distribution of sequence order correlation values")
+            bx.axes.get_yaxis().set_visible(False)
+
+            fig.subplots_adjust(right=0.8)
+            cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
+            fig.colorbar(im, cax=cbar_ax)
+
+            fig.savefig(write_file)
+        else:
+            # Process the data.
+            per_num = len_data / line_num
+            tar_data = get_fir_data(data, per_num, line_num)
+
+            # Plot the pic.
+            fig = plt.figure()
+            ax = fig.add_subplot(111)
+            if args['mode'] in const.METHODS_ACC:
+                ax.set_title("Distribution of sequence order correlation values")
+            else:
+                ax.set_title("Distribution of sequence composition values")
+
+            ax.axes.get_yaxis().set_visible(False)
+            cax = ax.imshow(tar_data, interpolation='nearest')
+            cbar = fig.colorbar(cax)
+            fig.savefig(write_file)
+
+
+def get_fir_data(data, per_num, line_num):
+    """Change the vector data to matrix data for ploting."""
+    fir_data = []
+    print(len(data))
+    if per_num == 0:
+        fir_data = [data]
+    elif per_num > 0:
+        temp_data = []
+        for ind in range(per_num + 1):
+            temp_line = data[ind*line_num:(ind+1)*line_num]
+            if temp_line:
+                temp_data.append(temp_line)
+
+        # Supply the none data in last line.
+        fir_data = temp_data
+        try:
+            if len(fir_data[-1]) != len(fir_data[-2]):
+                temp_min = min(data)
+                for i in range(len(fir_data[-1]), len(fir_data[-2])):
+                    fir_data[-1].append(temp_min)
+        except IndexError:
+            pass
+
+    return fir_data

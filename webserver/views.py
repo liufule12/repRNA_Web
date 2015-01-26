@@ -135,7 +135,7 @@ def visual(user_ip_time, ind):
                 args['category'] = line[1].rstrip().split(' ')[0]
             elif line[0] == 'Mode':
                 args['mode'] = line[1].rstrip()
-            elif line[0] == 'K':
+            elif line[0] == 'K' or line[0] == 'N' or line[0] == 'N':
                 args['k'] = int(line[1])
             elif line[0] == 'Lambda':
                 args['lamada'] = int(line[1])
@@ -153,14 +153,7 @@ def visual(user_ip_time, ind):
     tar_vis_path = user_dir + '/vis.jpg'
     with open(vis_path, 'wb') as f:
         pickle.dump(vis_line, f)
-    try:
-        cmd = 'python webserver/heatmap_ale.py ' + vis_path + ' ' + tar_vis_path + ' ' +\
-              args['mode'] + ' ' + str(args['k']) + ' ' + str(args['lamada'])
-    except KeyError:
-        cmd = 'python webserver/heatmap_ale.py ' + vis_path + ' ' + tar_vis_path + ' ' +\
-              args['mode'] + ' ' + str(args['k'])
-    cmd_args = shlex.split(cmd)
-    subprocess.Popen(cmd_args).wait()
+    _method.heatmap(read_file=vis_path, write_file=tar_vis_path, args=args)
 
     jpg_path = 'temp/' + user_ip_time + '/vis.jpg'
     return render_template("visualization.html", jpg_path=jpg_path, ind=ind, vec=vis_line, vec_name=vec_name, args=args)
