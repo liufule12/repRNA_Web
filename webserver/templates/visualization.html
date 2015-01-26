@@ -20,36 +20,38 @@
         </div>
 
         <div class="panel-body">
-            <div class="row text-center vertical-middle-sm">
-                <img src="{{ url_for('static', filename=jpg_path) }}" class="img-rounded"/>
-            </div>
+            <!-- Picture -->
+            <img src="{{ url_for('static', filename=jpg_path) }}" class="img-responsive img-rounded" alt="Responsive image"/>
 
+            <!-- Summary -->
             <p>
                 <strong>{{ vec_name }}</strong>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <strong>Dimensions: {{ vec|length }}</strong>
             </p>
-            <table class="table col-sm-10 table-bordered">
-                <tr>
-                {% for _res in vec %}
-                    {% if loop.index0 != 0 and loop.index0 % 10 == 0 %}
-                        </tr>
-                        <tr>
-                    {% endif %}
-                    {% if 'lamada' in args %}
-                        {% if args['mode'] == 'PC-PseDNC-General' or args['mode'] == 'SC-PseDNC-General' or args['mode'] == 'PseSSC' or args['mode'] == 'PseDPC' %}
-                            {% if loop.index0 >= (vec|length) - args['lamada']  %}
-                                <td><strong>{{ _res }}</strong></td>
-                            {% else %}
-                                <td>{{ _res }}</td>
-                            {% endif %}
+            <div class="table-responsive">
+                <table class="table col-sm-10 table-bordered">
+                    <tr>
+                    {% for _res in vec %}
+                        {% if loop.index0 != 0 and loop.index0 % 10 == 0 %}
+                            </tr>
+                            <tr>
                         {% endif %}
-                    {% else %}
-                        <td>{{ _res }}</td>
-                    {% endif %}
-                {% endfor %}
-                </tr>
-            </table>
+                        {% if 'lamada' in args %}
+                            {% if args['mode'] == 'PC-PseDNC-General' or args['mode'] == 'SC-PseDNC-General' or args['mode'] == 'PseSSC' or args['mode'] == 'PseDPC' %}
+                                {% if loop.index0 >= (vec|length) - args['lamada']  %}
+                                    <td><strong>{{ _res }}</strong></td>
+                                {% else %}
+                                    <td>{{ _res }}</td>
+                                {% endif %}
+                            {% endif %}
+                        {% else %}
+                            <td>{{ _res }}</td>
+                        {% endif %}
+                    {% endfor %}
+                    </tr>
+                </table>
+            </div>
 
             <div class="row text-center vertical-middle-sm">
                 <button class="btn btn-primary btn-lg" onclick="window.close()"><span class="glyphicon glyphicon-remove"></span> Close</button>
