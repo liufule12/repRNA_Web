@@ -32,7 +32,7 @@ def get_ind_names(filename):
     with open(filename) as f:
         lines = f.readlines()
         for line in lines:
-            if line == '>':
+            if line[0] == '>':
                 ind_names.append(line.rstrip()[1:])
 
     return ind_names
@@ -347,7 +347,7 @@ def heatmap(read_file, write_file, args):
         len_data = len(data)
         line_num = int(math.ceil(math.sqrt(len_data)))
 
-        if args['mode'] in const.METHODS_PSE:
+        if args['mode'] in const.METHODS_LAMADA_W:
             # Process the data.
             tar_data = [0] * 2
             spl_num = len_data - args['lamada']
