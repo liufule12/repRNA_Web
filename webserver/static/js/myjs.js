@@ -173,13 +173,13 @@ function setAutoForm(mode){
             document.forms[0].w.value = 0.05;
         }
     }else if (mode == "PseSSC"){
-        document.forms[0].n.value = 4;
-        document.forms[0].lamada.value = 10;
-        document.forms[0].w.value = 0.05;
+        document.forms[0].n.value = 2;
+        document.forms[0].lamada.value = 13;
+        document.forms[0].w.value = 0.5;
     }else if (mode == "PseDPC"){
-        document.forms[0].d.value = 4;
-        document.forms[0].lamada.value = 10;
-        document.forms[0].w.value = 0.05;
+        document.forms[0].d.value = 7;
+        document.forms[0].lamada.value = 15;
+        document.forms[0].w.value = 1;
     }
 
     document.forms[0].rec_data.value = ">EXAMPLE1\nGCAUCCGGGUUGAGGUAGUAGGUUGUAUGGUUUAGAGUUACACCCUGGGAGUUAACUGUACAACCUUCUAGCUUUCCUUGGAGC";
