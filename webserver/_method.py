@@ -38,22 +38,21 @@ def tran_args(form, mode):
     args = {}
 
     # Transform k.
-    if mode == 'Kmer':
+    if mode == 'Triplet':
+        args['k'] = 3
+    elif mode == 'Kmer':
         args['k'] = int(form['k'])
+    elif mode == 'PseSSC':
+        args['k'] = int(form['n'])
+    elif mode == 'PseDPC':
+        args['k'] = int(form['d'])
+
     if mode in const.METHODS_PHYCHE_INDEX:
         args['k'] = 2
 
     # Transform lag.
     if mode in const.METHODS_LAG:
         args['lag'] = int(form['lag'])
-
-    # Transform n.
-    if mode == 'PseSSC':
-        args['n'] = int(form['n'])
-
-    # Transform d.
-    if mode == 'PseDPC':
-        args['d'] = int(form['d'])
 
     # Transform lamada, w.
     if mode in const.METHODS_LAMADA_W:
@@ -76,7 +75,7 @@ def save_file(filename, user_dir):
 
 def check_user_data(method, rec_data, form_args, input_file, write_file):
     print("form_args:", method, form_args, form_args['k'])
-    if method == 'Kmer':
+    if method == 'Kmer' or method == 'Triplet':
         check_res = write_form_file(rec_data, input_file, write_file, form_args['k'], 0, const.ALPHABET_RNA)
     elif method in const.METHODS_LAG:
         check_res = write_form_file(rec_data, input_file, write_file, form_args['k'], form_args['lag'], const.ALPHABET_RNA)
@@ -175,10 +174,13 @@ def write_form_file(receive_data, filename, write_path, k, lamada, alphabet):
     return True, None, None, count_seq
 
 
-def pse_process(method, args, input_file, ind_file):
+def pse_process(method, args, input_file, ind_file, bracket_file, matched_file, vecs_file):
     print("Pse_Process args", method, args, input_file)
 
-    if method == 'Kmer':
+    if method == 'Triplet':
+        from pseALL.kmer import make_kmer_vector
+        return make_kmer_vector(k=3, alphabet=const.ALPHABET_RNA, filename=input_file)
+    elif method == 'Kmer':
         from pseALL.kmer import make_kmer_vector
         return make_kmer_vector(k=args['k'], alphabet=const.ALPHABET_RNA, filename=input_file)
     elif method in const.METHODS_LAG:
@@ -194,25 +196,125 @@ def pse_process(method, args, input_file, ind_file):
         return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
                       phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA, theta_type=2)
     elif method == 'PseSSC':
-        pass
+        print(input_file, bracket_file)
+        generate_bracket_seq(input_file, bracket_file)
+        psessc(args, bracket_file, vecs_file)
+        return read_tab_vecs(vecs_file)
     elif method == 'PseDPC':
-        pass
+        print(input_file, matched_file, bracket_file)
+        generate_bracket_seq(input_file, bracket_file)
+        match_2st_has_name(bracket_file, matched_file)
+        psedpc(args, matched_file, vecs_file)
+        return read_tab_vecs(vecs_file)
     else:
         print("pse_process error!")
 
 
+def generate_bracket_seq(receive_file_path, bracket_file_path):
+    """ This is a system command to generate bracket_seq file according receive_file. """
+    cmd = "RNAfold --noPS"
+    args = shlex.split(cmd)
+    subprocess.Popen(args, stdin=open(receive_file_path),
+                     stdout=open(bracket_file_path, 'w')).wait()
+
+
+def psessc(args, bracket_file, vecs_file):
+    """ Call java jar to generate PseSSC vecs."""
+    cmd = "java -jar " + const.MODEL_PSESSC_PATH + " " + str(args['k']) + " " + str(args['lamada']) + " " + str(float(args['w'] * 10)) +  \
+          " " + bracket_file + " " + vecs_file
+    print(cmd)
+    cmd_args = shlex.split(cmd)
+    subprocess.Popen(cmd_args).wait()
+
+
+def psedpc(args, bracket_file, vecs_file):
+    """ Call java jar to generate PseDPC vecs."""
+    cmd = "java -jar " + const.MODEL_PSEDPC_PATH + " " + str(args['k']) + " " + str(args['lamada']) + " " + str(float(args['w'] * 10)) +  \
+          " " + bracket_file + " " + vecs_file
+    print('----------------------', cmd)
+    cmd_args = shlex.split(cmd)
+    subprocess.Popen(cmd_args).wait()
+
+
+def match_2st_has_name(read_name, write_name):
+    """
+    Get matched sequence from 2st structure sequence and brackets.
+    File per line is seq_name, seq_old and seq_matched included MFE.
+    Input read file name, write file name.
+    Return seq, seq is a list of triple(seq_name, seq_old, seq_bracket, seq_matched).
+    """
+    f_open = open(read_name)
+    f_write = open(write_name, 'w')
+    lines = f_open.readlines()
+    len_lines = len(lines)
+    seq = []
+
+    for i in range(0, len_lines, 3):
+        # Get seq_name.
+        seq_name = ''
+        for j in range(1, len(lines[i])):
+            if ' ' != lines[i][j]:
+                seq_name += lines[i][j]
+
+        # Get the sequence_match sequence.
+        sequence_old = lines[i + 1].strip()
+        sequence_bracket = lines[i + 2].strip()
+        stack_sequence = []
+        stack_bracket = []
+        dict_match = {}
+        len_line = len(sequence_old)
+        for j in range(0, len_line):
+
+            if '.' == sequence_bracket[j]:
+                dict_match[j] = '.'
+            elif '(' == sequence_bracket[j]:
+                stack_bracket.append('(')
+                stack_sequence.append(j)
+                dict_match[j] = '('
+            elif ')' == sequence_bracket[j]:
+                stack_bracket.pop()
+                temp_order = stack_sequence.pop()
+                dict_match[temp_order] = sequence_old[j]
+                dict_match[j] = sequence_old[temp_order]
+            else:
+                print "match_2st error!!!!!!!!!!"
+                return
+
+        # Write seq_name, seq_old, seq_matched and include MFE.
+        f_write.write(seq_name)
+        f_write.write(lines[i + 1])
+        str_match_values = ''.join(dict_match.values())
+        f_write.write(str_match_values)
+        # f_write.write(lines[i + 2][len_line:])
+        f_write.write('\n')
+        seq.append((seq_name.strip(), sequence_old, lines[i + 2][:len_line], str_match_values))
+    return seq
+
+
+def read_tab_vecs(read_file):
+    with open(read_file) as f:
+        lines = f.readlines()
+        vecs = []
+
+        for line in lines:
+            vecs.append(line.rstrip().split())
+
+    return vecs
+
+
 def write_tab(mode, args, _vecs, vecs_name, write_file):
     """Write the vectors into disk in tab format."""
+    print(args, mode)
     with open(write_file, 'w') as f:
         # Write the parameters.
         f.write("Data type: RNA sequences\n")
         f.write("Mode: " + mode + '\n')
-        if 'k' in args:
-            f.write('K: ' + str(args['k']) + '\n')
-        if 'n' in args:
+        if mode == 'PseSSC':
             f.write('N: ' + str(args['k']) + '\n')
-        if 'd' in args:
+        elif mode == 'PseDPC':
             f.write('D: ' + str(args['k']) + '\n')
+        else:
+            f.write('K: ' + str(args['k']) + '\n')
         if args['props']:
             f.write('Properties: ' + str(args['props']) + '\n')
         if args['ext_ind']:

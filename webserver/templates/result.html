@@ -25,7 +25,7 @@
     {% else %}
         <div class="alert alert-success alert-dismissible fade in" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-            <p><strong>Congratulation!</strong> The parameter summary and results are as follows. &nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-default" onclick="window.history.back()">Back</button></p>
+            <p><strong>Congratulation!</strong> The parameter summary and results are as follows. &nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-default" onclick="window.history.back()">Back</button></p>
         </div>
 
         <!-- Parameter summary -->
@@ -54,14 +54,14 @@
                         {% if mode == 'PseSSC' %}
                             <div class="row">
                                 <label class="col-sm-2"><i>n</i> :</label>
-                                <p class="col-sm-2">{{ args['n'] }}</p>
+                                <p class="col-sm-2">{{ args['k'] }}</p>
                             </div>
                         {% endif %}
 
                         {% if mode == 'PseDPC' %}
                             <div class="row">
                                 <label class="col-sm-2"><i>d</i> :</label>
-                                <p class="col-sm-2">{{ args['d'] }}</p>
+                                <p class="col-sm-2">{{ args['k'] }}</p>
                             </div>
                         {% endif %}
 
@@ -135,7 +135,7 @@
                 </h4>
             </div>
 
-            <div id="collapseRes" class="panel-collapse collapse in">
+            <div class="panel-collapse collapse in" id="collapseRes">
                 <div class="panel-body">
                     <p><strong>Note</strong>: The black numbers represent the values of the sequence compositions (i.e. amino acid, nucleotide, dinucleotide, or trinucleotide, etc), while the red numbers represent the values of sequence order correlation.</p>
                 </div>
@@ -178,9 +178,21 @@
                                             {% else %}
                                                 <td>{{ _res }}</td>
                                             {% endif %}
+                                        {% elif mode == 'PseSSC' %}
+                                            {% if loop.index0 >= 10 ** args['k'] %}
+                                                <td><strong>{{ _res }}</strong></td>
+                                            {% else %}
+                                                <td>{{ _res }}</td>
+                                            {% endif %}
+                                        {% elif mode == 'PseDPC' %}
+                                            {% if loop.index0 >= 10 + 100 * args['k'] %}
+                                                <td><strong>{{ _res }}</strong></td>
+                                            {% else %}
+                                                <td>{{ _res }}</td>
+                                            {% endif %}
                                         {% endif %}
                                     {% else %}
-                                        <td>{{ loop.index0 + 1 }}:{{ _res }}</td>
+                                        <td>{{ _res }}</td>
                                     {% endif %}
                                 {% endfor %}
                                 </tr>

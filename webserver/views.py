@@ -99,7 +99,11 @@ def main(mode):
 
         # Process.
         try:
-            res = _method.pse_process(method=mode, args=form_args, input_file=input_file, ind_file=ind_file_path)
+            bracket_file = user_dir + '/' + 'bracket.txt'
+            matched_file = user_dir + '/' + 'matched.txt'
+            vecs_file = user_dir + '/' + 'vecs.txt'
+            res = _method.pse_process(method=mode, args=form_args, input_file=input_file, ind_file=ind_file_path,
+                                      bracket_file=bracket_file, matched_file=matched_file, vecs_file=vecs_file)
         except:
             if ind_file_path is not None:
                 return render_template("result.html",
