@@ -151,3 +151,36 @@ function formCheckArgs(mode)
 
     return true;
 }
+
+
+function setAutoForm(mode){
+    if(mode == 'Kmer'){
+        document.forms[0].k.value = 6;
+    }else if(mode == "DAC" || mode == "DCC" || mode == "DACC" || mode == "PC-PseDNC-General" || mode == "SC-PseDNC-General"){
+        var indices = document.getElementsByTagName("input");
+        for (var i = 0; i < indices.length; i++){
+            if (indices[i].type == "checkbox"){
+                indices[i].checked = !!(indices[i].name == "Roll (RNA)" || indices[i].name == "Rise (RNA)"
+                || indices[i].name == "Shift (RNA)" || indices[i].name == "Slide (RNA)"
+                || indices[i].name == "Tilt (RNA)" || indices[i].name == "Twist (RNA)");
+            }
+        }
+
+        if (mode == "DAC" || mode == "DCC" || mode == "DACC"){
+            document.forms[0].lag.value = 10;
+        }else{
+            document.forms[0].lamada.value = 10;
+            document.forms[0].w.value = 0.05;
+        }
+    }else if (mode == "PseSSC"){
+        document.forms[0].n.value = 4;
+        document.forms[0].lamada.value = 10;
+        document.forms[0].w.value = 0.05;
+    }else if (mode == "PseDPC"){
+        document.forms[0].d.value = 4;
+        document.forms[0].lamada.value = 10;
+        document.forms[0].w.value = 0.05;
+    }
+
+    document.forms[0].rec_data.value = ">EXAMPLE1\nGCAUCCGGGUUGAGGUAGUAGGUUGUAUGGUUUAGAGUUACACCCUGGGAGUUAACUGUACAACCUUCUAGCUUUCCUUGGAGC";
+}
