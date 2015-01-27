@@ -159,6 +159,11 @@ def visual(user_ip_time, ind):
     return render_template("visualization.html", jpg_path=jpg_path, ind=ind, vec=vis_line, vec_name=vec_name, args=args)
 
 
+@app.route("/fasta/")
+def fasta():
+    return render_template("fasta.html")
+
+
 @app.route("/test/")
 def test():
     return render_template("test.html")
