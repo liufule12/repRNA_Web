@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block navbar %}
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <li><a href="{{ url_for('server') }}">Server</a></li>
+            <li><a href="{{ url_for('tutorial') }}">Tutorial</a></li>
+            <li><a href="{{ url_for('download') }}">Download</a></li>
+            <li><a href="{{ url_for('citation') }}">Citation</a></li>
+            <li><a href="{{ url_for('contact') }}">Contact us</a></li>
+        </ul>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h4 class="panel-title">
+                <span class="glyphicon glyphicon-pencil"></span> Physicochemical indices format
+            </h4>
+        </div>
+
+        <div class="panel-body">
+            <p class="text-left">
+                The format of the user-defined physicochemical index files: each index should be represented in three lines. <br>
+                The first line must start with a greater-than symbol (">") in the first column. The words right after the ">" symbol in the single initial line are optional and only used for the purpose of identification and description of the index.<br>
+                The second line lists the names of the sequence compositions (i.e. amino acids, nucleotides, dinucleotides, or trinucleotides, etc), which should be sorted in the alphabet order, such as 'A' 'C' ... 'AA' 'AC'.<br>
+                The corresponding values of these sequence compositions are listed in the third line, which are separated by "tab". <br>
+                All the elements in this line should be separated by "tab".<br>
+
+                A examples are shown in <a href="{{ url_for('static', filename='web/RNA_indices.txt') }}">RNA_indices.txt</a>.
+            </p>
+        </div>
+    </div>
+{% endblock %}
