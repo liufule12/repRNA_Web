@@ -21,7 +21,13 @@
 
         <div class="panel-body">
             <!-- Picture -->
-            <img src="{{ url_for('static', filename=jpg_path) }}" class="img-responsive img-rounded" alt="Responsive image"/>
+            {% if args['mode'] != 'PseSSC' and args['mode'] != 'PseDPC' %}
+                <img src="{{ url_for('static', filename=jpg_path) }}" class="img-responsive img-rounded" alt="Responsive image"/>
+            {% else %}
+                <p class="alert alert-success">
+                    Because the picture format is ps format, it cannot be shown in HTML, so please download the picture (<a href="{{ url_for('static', filename=jpg_path) }}" target="_blank"><span class="glyphicon glyphicon-picture"></span> Visualization picture</a>).
+                </p>
+            {% endif %}
 
             <!-- Summary -->
             <p>

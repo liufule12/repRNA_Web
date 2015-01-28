@@ -103,7 +103,8 @@ def main(mode):
             matched_file = user_dir + '/' + 'matched.txt'
             vecs_file = user_dir + '/' + 'vecs.txt'
             res = _method.pse_process(method=mode, args=form_args, input_file=input_file, ind_file=ind_file_path,
-                                      bracket_file=bracket_file, matched_file=matched_file, vecs_file=vecs_file)
+                                      bracket_file=bracket_file, matched_file=matched_file, vecs_file=vecs_file,
+                                      user_dir=user_dir)
         except:
             if ind_file_path is not None:
                 return render_template("result.html",
@@ -115,7 +116,7 @@ def main(mode):
         download_path = 'temp/' + user_ip_time + '/res.txt'
         _method.write_tab(mode=mode, args=form_args, vecs_name=names, _vecs=res, write_file=write_file)
 
-        print(res)
+        # print(res)
         return render_template('result.html', er_info=(False, None), res=res, mode=mode, args=form_args, names=names,
                                write_file=download_path, user_ip_time=user_ip_time)
 
@@ -148,14 +149,18 @@ def visual(user_ip_time, ind):
     vis_line = lines[ind * 2 + 1].rstrip().split('\t')
     vis_line = [float(e) for e in vis_line]
 
-    # Plot heatmap.
-    vis_path = user_dir + '/vis.txt'
-    tar_vis_path = user_dir + '/vis.jpg'
-    with open(vis_path, 'wb') as f:
-        pickle.dump(vis_line, f)
-    _method.heatmap(read_file=vis_path, write_file=tar_vis_path, args=args)
+    # Find the visualization jpg picture path.
+    if args['mode'] != 'PseSSC' and args['mode'] != 'PseDPC':
+        # Plot heatmap.
+        vis_path = user_dir + '/vis.txt'
+        tar_vis_path = user_dir + '/vis.jpg'
+        with open(vis_path, 'wb') as f:
+            pickle.dump(vis_line, f)
+        _method.heatmap(read_file=vis_path, write_file=tar_vis_path, args=args)
+        jpg_path = 'temp/' + user_ip_time + '/vis.jpg'
+    else:
+        jpg_path = "temp/" + user_ip_time + "/" + vec_name[1:] + "_ss.ps"
 
-    jpg_path = 'temp/' + user_ip_time + '/vis.jpg'
     return render_template("visualization.html", jpg_path=jpg_path, ind=ind, vec=vis_line, vec_name=vec_name, args=args)
 
 

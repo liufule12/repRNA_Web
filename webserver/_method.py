@@ -177,7 +177,7 @@ def write_form_file(receive_data, filename, write_path, k, lamada, alphabet):
     return True, None, None, count_seq
 
 
-def pse_process(method, args, input_file, ind_file, bracket_file, matched_file, vecs_file):
+def pse_process(method, args, input_file, ind_file, bracket_file, matched_file, vecs_file, user_dir):
     if method == 'Triplet':
         from pseALL.kmer import make_kmer_vector
         return make_kmer_vector(k=3, alphabet=const.ALPHABET_RNA, filename=input_file)
@@ -207,11 +207,13 @@ def pse_process(method, args, input_file, ind_file, bracket_file, matched_file, 
     elif method == 'PseSSC':
         generate_bracket_seq(input_file, bracket_file)
         psessc(args, bracket_file, vecs_file)
+        mv_ps_file(bracket_file, user_dir)
         return read_tab_vecs(vecs_file)
     elif method == 'PseDPC':
         generate_bracket_seq(input_file, bracket_file)
         match_2st_has_name(bracket_file, matched_file)
         psedpc(args, matched_file, vecs_file)
+        mv_ps_file(bracket_file, user_dir)
         return read_tab_vecs(vecs_file)
     else:
         print("pse_process error!")
@@ -219,10 +221,8 @@ def pse_process(method, args, input_file, ind_file, bracket_file, matched_file, 
 
 def generate_bracket_seq(receive_file_path, bracket_file_path):
     """ This is a system command to generate bracket_seq file according receive_file. """
-    cmd = "RNAfold --noPS"
-    args = shlex.split(cmd)
-    subprocess.Popen(args, stdin=open(receive_file_path),
-                     stdout=open(bracket_file_path, 'w')).wait()
+    cmd = "RNAfold <" + receive_file_path + " >" + bracket_file_path
+    subprocess.Popen(cmd, shell=True).wait()
 
 
 def psessc(args, bracket_file, vecs_file):
@@ -294,6 +294,17 @@ def match_2st_has_name(read_name, write_name):
         f_write.write('\n')
         seq.append((seq_name.strip(), sequence_old, lines[i + 2][:len_line], str_match_values))
     return seq
+
+
+def mv_ps_file(bracket_file, user_dir):
+    """ Move the ps files (they are come from RNAfold command) to user fold."""
+    with open(bracket_file) as f:
+        lines = f.readlines()
+        for i, line in enumerate(lines):
+            if i % 3 == 0:
+                mv_file_name = line.rstrip()[1:] + "_ss.ps"
+                cmd = "mv " + os.getcwd() + "/" + mv_file_name + " " + user_dir + "/" + mv_file_name
+                subprocess.Popen(cmd, shell=True).wait()
 
 
 def read_tab_vecs(read_file):
