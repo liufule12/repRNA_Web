@@ -352,55 +352,53 @@ def write_tab(mode, args, _vecs, vecs_name, write_file):
             f.write('\n')
 
 
-def heatmap(read_file, write_file, args):
-    with open(read_file, 'rb') as vis_f:
-        data = pickle.load(vis_f)
-        len_data = len(data)
-        line_num = int(math.ceil(math.sqrt(len_data)))
+def heatmap(data, write_file, args):
+    len_data = len(data)
+    line_num = int(math.ceil(math.sqrt(len_data)))
 
-        if args['mode'] in const.METHODS_LAMADA_W:
-            # Process the data.
-            tar_data = [0] * 2
-            spl_num = len_data - args['lamada']
-            per_num = spl_num / line_num
-            tar_data[0] = get_fir_data(data[:spl_num], per_num, line_num)
-            tar_data[1] = [data[spl_num:]]
+    if args['mode'] in const.METHODS_LAMADA_W:
+        # Process the data.
+        tar_data = [0] * 2
+        spl_num = len_data - args['lamada']
+        per_num = spl_num / line_num
+        tar_data[0] = get_fir_data(data[:spl_num], per_num, line_num)
+        tar_data[1] = [data[spl_num:]]
 
-            # Plot the pic.
-            fig, axes = plt.subplots(nrows=2, ncols=1)
+        # Plot the pic.
+        fig, axes = plt.subplots(nrows=2, ncols=1)
 
-            ax = axes.flat[0]
-            im = ax.imshow(tar_data[0], interpolation='nearest')
-            ax.set_title("Distribution of sequence composition values")
-            ax.axes.get_yaxis().set_visible(False)
+        ax = axes.flat[0]
+        im = ax.imshow(tar_data[0], interpolation='nearest')
+        ax.set_title("Distribution of sequence composition values")
+        ax.axes.get_yaxis().set_visible(False)
 
-            bx = axes.flat[1]
-            im = bx.imshow(tar_data[1], interpolation='nearest')
-            bx.set_title("Distribution of sequence order correlation values")
-            bx.axes.get_yaxis().set_visible(False)
+        bx = axes.flat[1]
+        im = bx.imshow(tar_data[1], interpolation='nearest')
+        bx.set_title("Distribution of sequence order correlation values")
+        bx.axes.get_yaxis().set_visible(False)
 
-            fig.subplots_adjust(right=0.8)
-            cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
-            fig.colorbar(im, cax=cbar_ax)
+        fig.subplots_adjust(right=0.8)
+        cbar_ax = fig.add_axes([0.85, 0.15, 0.05, 0.7])
+        fig.colorbar(im, cax=cbar_ax)
 
-            fig.savefig(write_file)
+        fig.savefig(write_file)
+    else:
+        # Process the data.
+        per_num = len_data / line_num
+        tar_data = get_fir_data(data, per_num, line_num)
+
+        # Plot the pic.
+        fig = plt.figure()
+        ax = fig.add_subplot(111)
+        if args['mode'] in const.METHODS_ACC:
+            ax.set_title("Distribution of sequence order correlation values")
         else:
-            # Process the data.
-            per_num = len_data / line_num
-            tar_data = get_fir_data(data, per_num, line_num)
+            ax.set_title("Distribution of sequence composition values")
 
-            # Plot the pic.
-            fig = plt.figure()
-            ax = fig.add_subplot(111)
-            if args['mode'] in const.METHODS_ACC:
-                ax.set_title("Distribution of sequence order correlation values")
-            else:
-                ax.set_title("Distribution of sequence composition values")
-
-            ax.axes.get_yaxis().set_visible(False)
-            cax = ax.imshow(tar_data, interpolation='nearest')
-            cbar = fig.colorbar(cax)
-            fig.savefig(write_file)
+        ax.axes.get_yaxis().set_visible(False)
+        cax = ax.imshow(tar_data, interpolation='nearest')
+        cbar = fig.colorbar(cax)
+        fig.savefig(write_file)
 
 
 def get_fir_data(data, per_num, line_num):

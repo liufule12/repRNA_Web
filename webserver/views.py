@@ -125,10 +125,11 @@ def main(mode):
 def visual(user_ip_time, ind):
     ind = int(ind)
     args = {}
-    lines = []
     user_dir = os.getcwd() + '/webserver/static/temp/' + user_ip_time
     with open(user_dir + '/res.txt') as f:
         lines = f.readlines()
+
+    # Get args and vecs.
     for line_ind, line in enumerate(lines):
         if line != '\n':
             line = line.split(': ')
@@ -152,11 +153,8 @@ def visual(user_ip_time, ind):
     # Find the visualization jpg picture path.
     if args['mode'] != 'PseSSC' and args['mode'] != 'PseDPC':
         # Plot heatmap.
-        vis_path = user_dir + '/vis.txt'
         tar_vis_path = user_dir + '/vis.jpg'
-        with open(vis_path, 'wb') as f:
-            pickle.dump(vis_line, f)
-        _method.heatmap(read_file=vis_path, write_file=tar_vis_path, args=args)
+        _method.heatmap(data=vis_line, write_file=tar_vis_path, args=args)
         jpg_path = 'temp/' + user_ip_time + '/vis.jpg'
     else:
         jpg_path = "temp/" + user_ip_time + "/" + vec_name[1:] + "_ss.ps"
@@ -167,6 +165,11 @@ def visual(user_ip_time, ind):
 @app.route("/fasta/")
 def fasta():
     return render_template("fasta.html")
+
+
+@app.route("/indices/")
+def indices():
+    return render_template("indices.html")
 
 
 @app.route("/test/")
