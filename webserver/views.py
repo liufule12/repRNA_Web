@@ -21,7 +21,7 @@ def home():
 
 @app.route('/server/')
 def server():
-    return redirect("/RNA/Kmer/")
+    return redirect("/RNA/PseSSC/")
 
 
 @app.route('/tutorial.html')

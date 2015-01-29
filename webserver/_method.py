@@ -43,10 +43,20 @@ def tran_args(form, mode):
     args = {}
 
     # Transform k.
-    if mode == 'Triplet':
+    if mode == 'Nucleotide composition':
+        args['k'] = 1
+    elif mode == 'Dinucleotide composition':
+        args['k'] = 2
+    elif mode == 'Trinucleotide composition':
         args['k'] = 3
-    elif mode == 'Kmer':
-        args['k'] = int(form['k'])
+    elif mode == 'Tetranucleotide composition':
+        args['k'] = 4
+    elif mode == 'Pentanucleotide composition':
+        args['k'] = 5
+    elif mode == 'Hexanucleotide composition':
+        args['k'] = 6
+    elif mode == 'Triplet':
+        args['k'] = 3
     elif mode == 'PseSSC':
         args['k'] = int(form['n'])
     elif mode == 'PseDPC':
@@ -79,7 +89,7 @@ def save_file(filename, user_dir):
 
 
 def check_user_data(method, rec_data, form_args, input_file, write_file):
-    if method == 'Kmer' or method == 'Triplet':
+    if method in const.METHODS_KMER or method == 'Triplet':
         check_res = write_form_file(rec_data, input_file, write_file, form_args['k'], 0, const.ALPHABET_RNA)
     elif method in const.METHODS_LAG:
         check_res = write_form_file(rec_data, input_file, write_file, form_args['k'], form_args['lag'], const.ALPHABET_RNA)
@@ -181,26 +191,26 @@ def pse_process(method, args, input_file, ind_file, bracket_file, matched_file, 
     if method == 'Triplet':
         from pseALL.kmer import make_kmer_vector
         return make_kmer_vector(k=3, alphabet=const.ALPHABET_RNA, filename=input_file)
-    elif method == 'Kmer':
+    elif method in const.METHODS_KMER:
         from pseALL.kmer import make_kmer_vector
         return make_kmer_vector(k=args['k'], alphabet=const.ALPHABET_RNA, filename=input_file)
-    elif method in 'DAC':
+    elif method == 'Auto covariance':
         from pseALL.acc import acc
         return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
                    phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA)
-    elif method in 'DCC':
+    elif method == 'Cross covariance':
         from pseALL.acc import acc
         return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
                    phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA, theta_type=2)
-    elif method in 'DACC':
+    elif method == 'Auto-cross covariance':
         from pseALL.acc import acc
         return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
                    phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA, theta_type=3)
-    elif method == 'PC-PseDNC-General':
+    elif method == 'PC-PseDNC':
         from pseALL.pse import pseknc
         return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
                       phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA)
-    elif method == 'SC-PseDNC-General':
+    elif method == 'SC-PseDNC':
         from pseALL.pse import pseknc
         return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
                       phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA, theta_type=2)

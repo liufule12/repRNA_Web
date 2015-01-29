@@ -41,7 +41,7 @@
                     <div class="col-sm-12">
                         <div class="row">
                             <label class="col-sm-2 text-left"><i>Mode</i> :</label>
-                            <p class="col-sm-2">{{ mode }}</p>
+                            <p class="col-sm-4">{{ mode }}</p>
                         </div>
 
                         {% if mode == 'Kmer' %}
@@ -171,7 +171,7 @@
                                             <tr>
                                         {% endif %}
                                         {% if 'lamada' in args %}
-                                            {% if mode == 'PC-PseDNC-General' or mode == 'SC-PseDNC-General' or mode == 'PseSSC' or mode == 'PseDPC' %}
+                                            {% if mode == 'PC-PseDNC' or mode == 'SC-PseDNC' or mode == 'PseSSC' or mode == 'PseDPC' %}
                                                 {% if loop.index0 >= (vec|length) - args['lamada'] %}
                                                     <td><strong>{{ _res }}</strong></td>
                                                 {% else %}

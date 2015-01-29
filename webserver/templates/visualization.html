@@ -44,7 +44,7 @@
                             <tr>
                         {% endif %}
                         {% if 'lamada' in args %}
-                            {% if args['mode'] == 'PC-PseDNC-General' or args['mode'] == 'SC-PseDNC-General' or args['mode'] == 'PseSSC' or args['mode'] == 'PseDPC' %}
+                            {% if args['mode'] == 'PC-PseDNC' or args['mode'] == 'SC-PseDNC' or args['mode'] == 'PseSSC' or args['mode'] == 'PseDPC' %}
                                 {% if loop.index0 >= (vec|length) - args['lamada']  %}
                                     <td><strong>{{ _res }}</strong></td>
                                 {% else %}
@@ -57,10 +57,6 @@
                     {% endfor %}
                     </tr>
                 </table>
-            </div>
-
-            <div class="row text-center vertical-middle-sm">
-                <button class="btn btn-primary btn-lg" onclick="window.close()"><span class="glyphicon glyphicon-remove"></span> Close</button>
             </div>
         </div>
     </div>

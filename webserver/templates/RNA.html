@@ -32,44 +32,26 @@
                                 {{ mode }} <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="/RNA/Kmer/">Kmer</a></li>
+                                <li><a href="/RNA/Nucleotide composition/">Nucleotide composition</a></li>
+                                <li><a href="/RNA/Dinucleotide composition/">Dinucleotide composition</a></li>
+                                <li><a href="/RNA/Trinucleotide composition/">Trinucleotide composition</a></li>
+                                <li><a href="/RNA/Tetranucleotide composition/">Tetranucleotide composition</a></li>
+                                <li><a href="/RNA/Pentanucleotide composition/">Pentanucleotide composition</a></li>
+                                <li><a href="/RNA/Hexanucleotide composition/">Hexanucleotide composition</a></li>
                                 <li role="presentation" class="divider"></li>
-                                <li><a href="/RNA/DAC/">AC</a></li>
-                                <li><a href="/RNA/DCC/">CC</a></li>
-                                <li><a href="/RNA/DACC/">ACC</a></li>
+                                <li><a href="/RNA/Auto covariance/">Auto covariance</a></li>
+                                <li><a href="/RNA/Cross covariance/">Cross covariance</a></li>
+                                <li><a href="/RNA/Auto-cross covariance/">Auto-cross covariance</a></li>
                                 <li role="presentation" class="divider"></li>
                                 <li><a href="/RNA/Triplet/">Triplet</a></li>
                                 <li><a href="/RNA/PseSSC/">PseSSC</a></li>
                                 <li><a href="/RNA/PseDPC/">PseDPC</a></li>
                                 <li role="presentation" class="divider"></li>
-                                <li><a href="/RNA/PC-PseDNC-General/">PC-PseDNC</a></li>
-                                <li><a href="/RNA/SC-PseDNC-General/">SC-PseDNC</a></li>
+                                <li><a href="/RNA/PC-PseDNC/">PC-PseDNC</a></li>
+                                <li><a href="/RNA/SC-PseDNC/">SC-PseDNC</a></li>
                             </ul>
                         </div>
                     </div>
-
-                    <!-- Parameter: k -->
-                    {% if mode == 'Kmer' %}
-                        <div class="form-group">
-                            <label class="col-sm-2 text-left">
-                                <a id="tooltip_k" data-toggle="tooltip" data-placement="left" title="k is the number of neighboring nucleic acids">
-                                    <em>k </em>
-                                    <span class="glyphicon glyphicon-question-sign"></span>
-                                </a>
-                                :
-                            </label>
-                            <div class="col-sm-2">
-                                <select class="form-control" name="k">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option selected>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                </select>
-                            </div>
-                        </div>
-                    {% endif %}
 
                     <!-- Parameter: n -->
                     {% if mode == 'PseSSC' %}
@@ -117,7 +99,7 @@
                     {% endif %}
 
                     <!-- Parameter: lag -->
-                    {% if mode == 'DAC' or mode == 'DCC' or mode == 'DACC' %}
+                    {% if mode == 'Auto covariance' or mode == 'Cross covariance' or mode == 'Auto-cross covariance' %}
                         <div class="form-group">
                             <label class="col-sm-2 text-left">
                                 <a id="tooltip_lag" data-toggle="tooltip" data-placement="left" title="lag represents the distance between two oligomers along a RNA sequence">
@@ -133,7 +115,7 @@
                     {% endif %}
 
                     <!-- Parameter: lamada -->
-                    {% if mode == 'PseSSC' or mode == 'PseDPC' or mode == 'PC-PseDNC-General' or mode == 'SC-PseDNC-General' %}
+                    {% if mode == 'PseSSC' or mode == 'PseDPC' or mode == 'PC-PseDNC' or mode == 'SC-PseDNC' %}
                         <div class="form-group">
                             <label class="col-sm-2 text-left">
                                 {% if mode == 'PseSSC' %}
@@ -155,7 +137,7 @@
                     {% endif %}
 
                     <!-- Parameter: w -->
-                    {% if mode == 'PseSSC' or mode == 'PseDPC' or mode == 'PC-PseDNC-General' or mode == 'SC-PseDNC-General' %}
+                    {% if mode == 'PseSSC' or mode == 'PseDPC' or mode == 'PC-PseDNC' or mode == 'SC-PseDNC' %}
                         <div class="form-group">
                             <label class="col-sm-2 text-left">
                                 {% if mode == 'PseSSC' or mode == 'PseDPC' %}
@@ -175,7 +157,7 @@
                     {% endif %}
 
                     <!-- Parameter: phyche_index -->
-                    {% if mode == 'DAC' or mode == 'DCC' or mode == 'DACC' or mode == 'PC-PseDNC-General' or mode == 'SC-PseDNC-General' %}
+                    {% if mode == 'Auto covariance' or mode == 'Cross covariance' or mode == 'Auto-cross covariance' or mode == 'PC-PseDNC' or mode == 'SC-PseDNC' %}
                         <div class="form-group">
                             <label class="col-sm-1 text-left"><em>Physicochemical properties</em>:</label>
                             <div class="col-sm-offset-1 col-sm-10 table-responsive">

@@ -63,7 +63,7 @@ function checkFileExtend(id){
 function formCheckArgs(mode)
 {
     // Check parameter lag.
-    if (mode == "DAC" || mode == "DCC" || mode == "DACC")
+    if (mode == "Auto covariance" || mode == "Cross covariance" || mode == "Auto-cross covariance")
         if(document.myForm.lag.value == ""){
             alert("Please input the parameter lag!");
             document.myForm.lag.focus();
@@ -75,7 +75,7 @@ function formCheckArgs(mode)
         }
 
     // Check parameter λ, w.
-    if (mode == "PseSSC" || mode == "PseDPC" || mode == "PC-PseDNC-General" || mode == "SC-PseDNC-General"){
+    if (mode == "PseSSC" || mode == "PseDPC" || mode == "PC-PseDNC" || mode == "SC-PseDNC"){
         if (document.myForm.lamada.value == ""){
             alert("Please input the parameter λ!");
             document.myForm.lamada.focus();
@@ -117,7 +117,7 @@ function formCheckArgs(mode)
     }
 
     // Physicochemical properties and index file cannot be both null.
-    if (mode == "DAC" || mode == "DCC" || mode == "DACC" || mode == "PC-PseDNC-General" || mode == "SC-PseDNC-General"){
+    if (mode == "Auto covariance" || mode == "Cross covariance" || mode == "Auto-cross covariance" || mode == "PC-PseDNC" || mode == "SC-PseDNC"){
         if (document.getElementById("upload_ind").value == ""){
             var checked = false;
             var indices = document.getElementsByTagName("input");
@@ -154,9 +154,7 @@ function formCheckArgs(mode)
 
 
 function setAutoForm(mode){
-    if(mode == 'Kmer'){
-        document.forms[0].k.value = 6;
-    }else if(mode == "DAC" || mode == "DCC" || mode == "DACC" || mode == "PC-PseDNC-General" || mode == "SC-PseDNC-General"){
+    if(mode == "Auto covariance" || mode == "Cross covariance" || mode == "Auto-cross covariance" || mode == "PC-PseDNC" || mode == "SC-PseDNC"){
         var indices = document.getElementsByTagName("input");
         for (var i = 0; i < indices.length; i++){
             if (indices[i].type == "checkbox"){
@@ -166,7 +164,7 @@ function setAutoForm(mode){
             }
         }
 
-        if (mode == "DAC" || mode == "DCC" || mode == "DACC"){
+        if (mode == "Auto covariance" || mode == "Cross covariance" || mode == "Auto-cross covariance"){
             document.forms[0].lag.value = 10;
         }else{
             document.forms[0].lamada.value = 10;
@@ -182,5 +180,5 @@ function setAutoForm(mode){
         document.forms[0].w.value = 1;
     }
 
-    document.forms[0].rec_data.value = ">EXAMPLE1\nGCAUCCGGGUUGAGGUAGUAGGUUGUAUGGUUUAGAGUUACACCCUGGGAGUUAACUGUACAACCUUCUAGCUUUCCUUGGAGC";
+    document.forms[0].rec_data.value = ">EXAMPLE1\nGCAUCCGGGUUGAGGUAGUAGGUUGUAUGGUUUAGAGUUACACCCUGGGAGUUAACUGUACAACCUUCUAGCUUUCCUUGGAGC\n>EXAMPLE2\nCCUAGGAAGAGGUAGUAGGUUGCAUAGUUUUAGGGCAGGGAUUUUGCCCACAAGGAGGUAACUAUACGACCUGCUGCCUUUCUUAGG\n>EXAMPLE3\nGAGGGCAGGGGGCACAGUCCAACUCCAGGCUUGUAGCUGUCCAGGGGCUGGGUGCCCGCCCGGCAGCGGCAGACUGUGUCCUGUGUGGCCGUGCACA\n>EXAMPLE4\nAAGCACCAGAGACGAACAGUCUGGUGUCAGGAGCAAGAGAAAGGCUCAUGACAUCUCCAGUGUGUCCGGUAAACGUGGUCG";
 }
