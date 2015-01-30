@@ -145,7 +145,7 @@
             <div class="panel panel-success">
                 {% for vec in res %}
                     <div class="panel-heading col-sm-12" style="padding: 0;">
-                        <a class="panel-title btn btn-sm col-sm-10" data-toggle="collapse" href="#collapseRes{{ loop.index }}" aria-expanded="true" aria-controls="collapseRes{{ loop.index }}">
+                        <a class="panel-title btn btn-sm col-sm-8" data-toggle="collapse" href="#collapseRes{{ loop.index }}" aria-expanded="true" aria-controls="collapseRes{{ loop.index }}">
                             <h5 class="text-left">
                                 {{ loop.index }}.
                                 &nbsp;&nbsp;&nbsp;&nbsp;
@@ -155,9 +155,20 @@
                                 &nbsp;&nbsp;&nbsp;&nbsp;
                             </h5>
                         </a>
-                        <a class="btn btn-default btn-sm col-sm-2" href="http://219.223.247.165:5000/visual/{{ user_ip_time }}/{{ loop.index0 }}" target="_blank">
-                            <span class="glyphicon glyphicon-eye-open"> Visualization</span>
-                        </a>
+
+                        {% if mode == 'PseSSC' or mode == 'PseDPC' %}
+                            <a class="btn btn-default btn-sm col-sm-2" href="http://219.223.247.165:5000/vis/structure/{{ user_ip_time }}/{{ loop.index0 }}" target="_blank">
+                                <span class="glyphicon glyphicon-eye-open"> Secondary structure</span>
+                            </a>
+                            <a class="btn btn-default btn-sm col-sm-2" href="http://219.223.247.165:5000/vis/feature/{{ user_ip_time }}/{{ loop.index0 }}" target="_blank">
+                                <span class="glyphicon glyphicon-eye-open"> Feature vector</span>
+                            </a>
+                        {% else %}
+                            <a class="btn btn-default btn-sm col-sm-offset-2 col-sm-2" href="http://219.223.247.165:5000/vis/feature/{{ user_ip_time }}/{{ loop.index0 }}" target="_blank">
+                                <span class="glyphicon glyphicon-eye-open"> Feature vector</span>
+                            </a>
+                        {% endif %}
+
                     </div>
 
                     <div class="panel-collapse collapse in" id="collapseRes{{ loop.index }}">

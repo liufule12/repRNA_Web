@@ -121,8 +121,8 @@ def main(mode):
                                write_file=download_path, user_ip_time=user_ip_time)
 
 
-@app.route("/visual/<user_ip_time>/<ind>/")
-def visual(user_ip_time, ind):
+@app.route("/vis/<pic_type>/<user_ip_time>/<ind>/")
+def visual(pic_type, user_ip_time, ind):
     ind = int(ind)
     args = {}
     user_dir = os.getcwd() + '/webserver/static/temp/' + user_ip_time
@@ -150,16 +150,16 @@ def visual(user_ip_time, ind):
     vis_line = lines[ind * 2 + 1].rstrip().split('\t')
     vis_line = [float(e) for e in vis_line]
 
-    # Find the visualization jpg picture path.
-    if args['mode'] != 'PseSSC' and args['mode'] != 'PseDPC':
-        # Plot heatmap.
+    # Plot heatmap.
+    if pic_type == 'feature':
         tar_vis_path = user_dir + '/vis.jpg'
         _method.heatmap(data=vis_line, write_file=tar_vis_path, args=args)
-        jpg_path = 'temp/' + user_ip_time + '/vis.jpg'
-    else:
-        jpg_path = "temp/" + user_ip_time + "/" + vec_name[1:] + "_ss.ps"
+        pic_path = 'temp/' + user_ip_time + '/vis.jpg'
+    elif pic_type == 'structure':
+        pic_path = "temp/" + user_ip_time + "/" + vec_name[1:] + "_ss.ps"
 
-    return render_template("visualization.html", jpg_path=jpg_path, ind=ind, vec=vis_line, vec_name=vec_name, args=args)
+    return render_template("visualization.html", pic_type=pic_type, pic_path=pic_path,
+                           ind=ind, vec=vis_line, vec_name=vec_name, args=args)
 
 
 @app.route("/fasta/")

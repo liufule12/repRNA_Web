@@ -11,6 +11,7 @@ METHODS_LAG = ['Auto covariance', 'Cross covariance', 'Auto-cross covariance']
 METHODS_LAMADA_W = ['PseSSC', 'PseDPC', 'PC-PseDNC', 'SC-PseDNC']
 METHODS_PSE = ['PC-PseDNC', 'SC-PseDNC']
 METHODS_ACC = ['Auto covariance', 'Cross covariance', 'Auto-cross covariance']
+METHODS_STRUCTURE = ['PseSSC', 'PseDPC']
 
 RNA_ALP_NUM = 4
 

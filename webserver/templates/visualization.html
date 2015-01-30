@@ -15,17 +15,21 @@
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h4 class="panel-title">
-                <span class="glyphicon glyphicon-eye-open"></span> Vector visualization
+                {% if pic_type == 'feature' %}
+                    <span class="glyphicon glyphicon-eye-open"></span> Feature vector visualization
+                {% elif pic_type == 'structure' %}
+                    <span class="glyphicon glyphicon-eye-open"></span> Secondary structure visualization
+                {% endif %}
             </h4>
         </div>
 
         <div class="panel-body">
             <!-- Picture -->
-            {% if args['mode'] != 'PseSSC' and args['mode'] != 'PseDPC' %}
-                <img src="{{ url_for('static', filename=jpg_path) }}" class="img-responsive img-rounded" alt="Responsive image"/>
-            {% else %}
+            {% if pic_type == 'feature' %}
+                <img src="{{ url_for('static', filename=pic_path) }}" class="img-responsive img-rounded" alt="Responsive image"/>
+            {% elif pic_type == 'structure' %}
                 <p class="alert alert-success">
-                    Because the picture format is ps format, it cannot be shown in HTML, so please download the picture (<a href="{{ url_for('static', filename=jpg_path) }}" target="_blank"><span class="glyphicon glyphicon-picture"></span> Visualization picture</a>).
+                    Because the picture format is ps format, it cannot be shown in HTML, so please download the picture (<a href="{{ url_for('static', filename=pic_path) }}" target="_blank"><span class="glyphicon glyphicon-picture"></span> Visualization picture</a>).
                 </p>
             {% endif %}
 
