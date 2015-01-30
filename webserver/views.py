@@ -4,6 +4,7 @@ import subprocess
 import time
 import pickle
 
+import Image
 from webserver import app
 from flask import Flask, render_template, redirect, request
 from werkzeug.exceptions import RequestEntityTooLarge
@@ -152,11 +153,15 @@ def visual(pic_type, user_ip_time, ind):
 
     # Plot heatmap.
     if pic_type == 'feature':
-        tar_vis_path = user_dir + '/vis.jpg'
+        tar_vis_path = user_dir + '/vis.png'
         _method.heatmap(data=vis_line, write_file=tar_vis_path, args=args)
-        pic_path = 'temp/' + user_ip_time + '/vis.jpg'
+        pic_path = 'temp/' + user_ip_time + '/vis.png'
     elif pic_type == 'structure':
-        pic_path = "temp/" + user_ip_time + "/" + vec_name[1:] + "_ss.ps"
+        pic_ps_path = user_dir + "/" + vec_name[1:] + "_ss.ps"
+        pic_gif_path = user_dir + "/" + vec_name[1:] + "_ss.gif"
+        Image.open(pic_ps_path).save(pic_gif_path)
+
+        pic_path = "temp/" + user_ip_time + "/" + vec_name[1:] + "_ss.gif"
 
     return render_template("visualization.html", pic_type=pic_type, pic_path=pic_path,
                            ind=ind, vec=vis_line, vec_name=vec_name, args=args)

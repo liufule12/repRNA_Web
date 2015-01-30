@@ -28,9 +28,10 @@
             {% if pic_type == 'feature' %}
                 <img src="{{ url_for('static', filename=pic_path) }}" class="img-responsive img-rounded" alt="Responsive image"/>
             {% elif pic_type == 'structure' %}
-                <p class="alert alert-success">
-                    Because the picture format is ps format, it cannot be shown in HTML, so please download the picture (<a href="{{ url_for('static', filename=pic_path) }}" target="_blank"><span class="glyphicon glyphicon-picture"></span> Visualization picture</a>).
-                </p>
+                <div class="col-sm-offset-2">
+                    <img src="{{ url_for('static', filename=pic_path) }}" class="img-responsive img-rounded" alt="Responsive image"/>
+                    <br>
+                </div>
             {% endif %}
 
             <!-- Summary -->
