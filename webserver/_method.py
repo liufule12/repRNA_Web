@@ -55,8 +55,6 @@ def tran_args(form, mode):
         args['k'] = 5
     elif mode == 'Hexanucleotide composition':
         args['k'] = 6
-    elif mode == 'Triplet':
-        args['k'] = 3
     elif mode == 'PseSSC':
         args['k'] = int(form['n'])
     elif mode == 'PseDPC':
@@ -89,8 +87,10 @@ def save_file(filename, user_dir):
 
 
 def check_user_data(method, rec_data, form_args, input_file, write_file):
-    if method in const.METHODS_KMER or method == 'Triplet':
+    if method in const.METHODS_KMER:
         check_res = write_form_file(rec_data, input_file, write_file, form_args['k'], 0, const.ALPHABET_RNA)
+    elif method == 'Triplet':
+        check_res = write_form_file(rec_data, input_file, write_file, k=0, lamada=0, alphabet=const.ALPHABET_RNA)
     elif method in const.METHODS_LAG:
         check_res = write_form_file(rec_data, input_file, write_file, form_args['k'], form_args['lag'], const.ALPHABET_RNA)
     elif method in const.METHODS_LAMADA_W:
@@ -188,10 +188,7 @@ def write_form_file(receive_data, filename, write_path, k, lamada, alphabet):
 
 
 def pse_process(method, args, input_file, ind_file, bracket_file, matched_file, vecs_file, user_dir):
-    if method == 'Triplet':
-        from pseALL.kmer import make_kmer_vector
-        return make_kmer_vector(k=3, alphabet=const.ALPHABET_RNA, filename=input_file)
-    elif method in const.METHODS_KMER:
+    if method in const.METHODS_KMER:
         from pseALL.kmer import make_kmer_vector
         return make_kmer_vector(k=args['k'], alphabet=const.ALPHABET_RNA, filename=input_file)
     elif method == 'Auto covariance':
@@ -214,6 +211,11 @@ def pse_process(method, args, input_file, ind_file, bracket_file, matched_file, 
         from pseALL.pse import pseknc
         return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
                       phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA, theta_type=2)
+    elif method == 'Triplet':
+        generate_bracket_seq(input_file, bracket_file)
+        triplet(bracket_file, vecs_file)
+        mv_ps_file(bracket_file, user_dir)
+        return read_tab_vecs(vecs_file)
     elif method == 'PseSSC':
         generate_bracket_seq(input_file, bracket_file)
         psessc(args, bracket_file, vecs_file)
@@ -233,6 +235,12 @@ def generate_bracket_seq(receive_file_path, bracket_file_path):
     """ This is a system command to generate bracket_seq file according receive_file. """
     cmd = "RNAfold <" + receive_file_path + " >" + bracket_file_path
     subprocess.Popen(cmd, shell=True).wait()
+
+
+def triplet(bracket_file, vecs_file):
+    cmd = "perl " + const.MODEL_TRIPLET_PATH + " " + bracket_file + " " + vecs_file
+    cmd_args = shlex.split(cmd)
+    subprocess.Popen(cmd_args).wait()
 
 
 def psessc(args, bracket_file, vecs_file):
@@ -331,15 +339,17 @@ def read_tab_vecs(read_file):
 def write_tab(mode, args, _vecs, vecs_name, write_file):
     """Write the vectors into disk in tab format."""
     with open(write_file, 'w') as f:
+        print("------------------args", args)
         # Write the parameters.
         f.write("Data type: RNA sequences\n")
         f.write("Mode: " + mode + '\n')
-        if mode == 'PseSSC':
-            f.write('N: ' + str(args['k']) + '\n')
-        elif mode == 'PseDPC':
-            f.write('D: ' + str(args['k']) + '\n')
-        else:
-            f.write('K: ' + str(args['k']) + '\n')
+        if 'k' in args:
+            if mode == 'PseSSC':
+                f.write('N: ' + str(args['k']) + '\n')
+            elif mode == 'PseDPC':
+                f.write('D: ' + str(args['k']) + '\n')
+            else:
+                f.write('K: ' + str(args['k']) + '\n')
         if args['props']:
             f.write('Properties: ' + str(args['props']) + '\n')
         if args['ext_ind']:

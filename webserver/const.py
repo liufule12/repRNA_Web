@@ -18,5 +18,6 @@ RNA_ALP_NUM = 4
 ALPHABET_RNA = "ACGU"
 MAX_SEQ_NUM = 50
 
+MODEL_TRIPLET_PATH = os.getcwd() + '/webserver/model/miRNA_32.pl'
 MODEL_PSESSC_PATH = os.getcwd() + '/webserver/model/PseNC_RL-single_0.4.jar'
 MODEL_PSEDPC_PATH = os.getcwd() + '/webserver/model/Stru_PseFV_sealed_0.4.jar'
