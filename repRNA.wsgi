@@ -1,8 +1,8 @@
 import sys
-sys.path.insert(0, '/var/www/Pse-in-One')
+sys.path.insert(0, '/var/www/repRNA')
 
 from webserver import app as application
 application.debug = True
 
 import os
-os.chdir('/var/www/Pse-in-One')
+os.chdir('/var/www/repRNA')
