@@ -14,7 +14,7 @@
 {% block content %}
     <div class="panel panel-primary">
         <div class="panel-heading">
-            Select or input the following parameters
+            Server
         </div>
         <div class="panel-body">
             <div class="tab-content">
@@ -193,17 +193,18 @@
                                     <tr>
                                         <td><label><input type="checkbox" name="Tilt (RNA)"><span class="label label-primary">Tilt (RNA)</span></label></td>
                                         <td><label><input type="checkbox" name="Thymine content"><span class="label label-primary">Thymine content</span></label></td>
-                                        <td><button type="button" class="btn btn-success btn-sm btn-block" onclick="checkAll()">All</button></td>
-                                        <td><button type="button" class="btn btn-success btn-sm btn-block" onclick="checkRev()">Reverse</button></td>
-                                        <td><button type="button" class="btn btn-success btn-sm btn-block" onclick="checkNone()">None</button></td>
+                                        <td><button type="button" class="btn btn-primary btn-sm btn-block" onclick="checkAll()">All</button></td>
+                                        <td><button type="button" class="btn btn-primary btn-sm btn-block" onclick="checkRev()">Reverse</button></td>
+                                        <td><button type="button" class="btn btn-primary btn-sm btn-block" onclick="checkNone()">None</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="5">
+                                            <p class="col-sm-6 text-left">(<strong>Optional</strong>) Upload a user-defined physicochemical index file<a href="{{ url_for('indices') }}" target="_blank">(?)</a>: </p>
+                                            <input type="file" id="upload_ind" name="upload_ind">
+                                        </td>
                                     </tr>
                                 </table>
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <p class="col-sm-5 text-left">(<strong>Optional</strong>) Upload a user-defined physicochemical index file<a href="{{ url_for('indices') }}" target="_blank">(?)</a>: </p>
-                            <input type="file" id="upload_ind" name="upload_ind">
                         </div>
                     {% endif %}
 
@@ -219,11 +220,9 @@
                         </div>
                     </div>
 
-                    <div class="col-sm-offset-4">
-                        <button type="submit" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok"></span> Submit</button>
-                        <button type="reset" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-remove"></span> Reset</button>
-                        <button type="button" class="btn btn-primary btn-lg" onclick="setAutoForm('{{ mode }}')">Example</button>
-                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-ok"></span> Submit</button>
+                    <button type="reset" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-remove"></span> Reset</button>
+                    <button type="button" class="btn btn-primary btn-lg" onclick="setAutoForm('{{ mode }}')">Example</button>
                 </form>
 
                 <!-- tooltip init. -->
