@@ -89,7 +89,7 @@ def main(mode):
         check_res = _method.check_user_data(method=mode, rec_data=rec_data, form_args=form_args,
                                             input_file=data_file, write_file=input_file)
         if check_res[0] is False:
-            return render_template("result.html", er_info=(True, check_res[1]))
+            return render_template("result.html", er_info=(True, check_res[1], check_res[2]))
         print("rec_data is ok.")
 
         # Get sequences names.
@@ -109,7 +109,8 @@ def main(mode):
         except:
             if ind_file_path is not None:
                 return render_template("result.html",
-                                       er_info=(True, "The physicochemical indices file format error."))
+                                       er_info=(True, "Upload file error!",
+                                                "The user-defined physicochemical index file format error."))
             raise
 
         # Write the res in TAB format.

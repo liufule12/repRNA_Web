@@ -6,6 +6,7 @@ import subprocess
 import sys
 import pickle
 import math
+import re
 
 from flask import request
 from werkzeug.utils import secure_filename
@@ -13,11 +14,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import webserver.const as const
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1] in const.ALLOWED_EXTENSIONS
 
 
 def create_user_fold(user_dir):
@@ -92,9 +88,11 @@ def check_user_data(method, rec_data, form_args, input_file, write_file):
     elif method == 'Triplet':
         check_res = write_form_file(rec_data, input_file, write_file, k=0, lamada=0, alphabet=const.ALPHABET_RNA)
     elif method in const.METHODS_LAG:
-        check_res = write_form_file(rec_data, input_file, write_file, form_args['k'], form_args['lag'], const.ALPHABET_RNA)
+        check_res = write_form_file(rec_data, input_file, write_file, form_args['k'], form_args['lag'],
+                                    const.ALPHABET_RNA)
     elif method in const.METHODS_LAMADA_W:
-        check_res = write_form_file(rec_data, input_file, write_file, form_args['k'], form_args['lamada'], const.ALPHABET_RNA)
+        check_res = write_form_file(rec_data, input_file, write_file, form_args['k'], form_args['lamada'],
+                                    const.ALPHABET_RNA)
     else:
         print("check_user_data RNA error!")
 
@@ -104,7 +102,6 @@ def check_user_data(method, rec_data, form_args, input_file, write_file):
 def is_alphabet(s, alphabet):
     """Check all element of line is under alphabet.
     """
-    import re
     if alphabet == const.ALPHABET_RNA and re.search(r'[^ACGUacgu]', s) is not None:
         return False
     return True
@@ -137,17 +134,17 @@ def write_form_file(receive_data, filename, write_path, k, lamada, alphabet):
                 count_seq += 1
                 # Sequence has not name.
                 if len(e) <= 1:
-                    return False, "Error, the sequence " + str(count_seq) + " has no name."
+                    return False, "Sequence error!", "The sequence " + str(count_seq) + " has no name."
                 # If the first_seq is not >, then error!
                 if not first_is_seq:
-                    return False, "Error, the sequence " + str(count_seq) + ": begin is not >."
+                    return False, "Sequence input error!", "The sequence " + str(count_seq) + ": begin is not >."
                 # If the sequence is not follow the >, then error!
                 if not has_seq:
-                    return False, "Error, the sequence " + str(count_seq - 1) + " has not sequence."
+                    return False, "Sequence error!", "The sequence " + str(count_seq - 1) + " has not sequence."
                 # If (the length of sequence - k) is less than lamada, then error!
                 if len_seq - k < lamada:
-                    return False, "Error, the sequence " + str(
-                        count_seq - 1) + " parameter lamada must be less than and equal to L-" + str(
+                    return False, "Parameter lambda error!", "The sequence " + str(
+                        count_seq - 1) + ": parameter lambda must be less than and equal to L-" + str(
                         k) + " where L is the length of the query sequence and " + str(
                         k) + " is the length of the selected oligomer mode."
                 if need_newline:
@@ -162,9 +159,11 @@ def write_form_file(receive_data, filename, write_path, k, lamada, alphabet):
             e = e.upper()
             # If the sequence is not match the fasta form, then error!
             if 0 == count_seq and False == is_alphabet(e, alphabet):
-                return False, "Error, the sequence " + str(count_seq + 1) + " has non " + alphabet + " characters."
+                return False, "Sequence error!", "The sequence " + str(
+                    count_seq + 1) + " has non " + alphabet + " characters."
             if not is_alphabet(e, alphabet):
-                return False, "Error, the sequence " + str(count_seq) + " has non " + alphabet + " characters."
+                return False, "Sequence error!", "The Sequence " + str(
+                    count_seq) + " has non " + alphabet + " characters."
             if 0 == count_seq and True == first_is_seq:
                 first_is_seq = False
             has_seq = True
@@ -173,18 +172,18 @@ def write_form_file(receive_data, filename, write_path, k, lamada, alphabet):
 
         # Check the last sequence.
         if not has_seq:
-            return False, "Error, the last sequence has not sequence."
+            return False, "Sequence error!", "The last sequence has not sequence."
         if len_seq - k < lamada:
-            return False, "Error, the last sequence parameter lamada must be less than and equal to L-" + str(
-                k) + " where L is the length of the query sequence and " + str(
-                k) + " is the length of the selected oligomer mode."
+            return False, "Sequence error!", "The last sequence: parameter lamada must be less than and equal to L-" + \
+                str(k) + " where L is the length of the query sequence and " + \
+                str(k) + " is the length of the selected oligomer mode."
 
         # If there are only a sequence, but no >, then error!
         if count_seq < 1:
-            return False, "Error, the only sequence has not sequence name."
+            return False, "Sequence error!", "The only sequence has not sequence name."
         # PseSSC seq count must be less than 50.
         if (alphabet == const.ALPHABET_RNA) and count_seq > const.MAX_SEQ_NUM:
-            return False, "Error, the sequence number must be less than " + str(const.MAX_SEQ_NUM) + "."
+            return False, "Sequence error!", "The sequences number must be less than " + str(const.MAX_SEQ_NUM) + "."
 
     return True, None, None, count_seq
 
@@ -192,25 +191,31 @@ def write_form_file(receive_data, filename, write_path, k, lamada, alphabet):
 def pse_process(method, args, input_file, ind_file, bracket_file, matched_file, vecs_file, user_dir):
     if method in const.METHODS_KMER:
         from pseALL.kmer import make_kmer_vector
+
         return make_kmer_vector(k=args['k'], alphabet=const.ALPHABET_RNA, filename=input_file)
     elif method == 'Auto covariance':
         from pseALL.acc import acc
+
         return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
                    phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA)
     elif method == 'Cross covariance':
         from pseALL.acc import acc
+
         return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
                    phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA, theta_type=2)
     elif method == 'Auto-cross covariance':
         from pseALL.acc import acc
+
         return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
                    phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA, theta_type=3)
     elif method == 'PC-PseDNC':
         from pseALL.pse import pseknc
+
         return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
                       phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA)
     elif method == 'SC-PseDNC':
         from pseALL.pse import pseknc
+
         return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
                       phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA, theta_type=2)
     elif method == 'Triplet':
@@ -432,7 +437,7 @@ def get_fir_data(data, per_num, line_num):
     elif per_num > 0:
         temp_data = []
         for ind in range(per_num + 1):
-            temp_line = data[ind*line_num:(ind+1)*line_num]
+            temp_line = data[ind * line_num:(ind + 1) * line_num]
             if temp_line:
                 temp_data.append(temp_line)
 

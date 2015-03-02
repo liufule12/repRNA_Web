@@ -15,8 +15,8 @@
     <!-- Error page. -->
     {% if er_info[0] == True %}
         <div class="alert alert-danger alert-dismissible fade in" role="alert">
-            <h4><span class="glyphicon glyphicon-exclamation-sign"></span> Oh snap! You got an error!</h4>
-            <p>{{ er_info[1] }}</p>
+            <h4><span class="glyphicon glyphicon-exclamation-sign"></span> {{ er_info[1] }}</h4>
+            <p>{{ er_info[2] }}</p>
             <p>
                 <button type="button" class="btn btn-danger" onclick="window.history.back()">Back</button>
             </p>
