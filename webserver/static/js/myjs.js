@@ -68,7 +68,7 @@ function formCheckArgs(mode)
             alert("Please input the parameter lag!");
             document.myForm.lag.focus();
             return false;
-        }else if(document.myForm.lag.value < 0){
+        }else if(document.myForm.lag.value <= 0){
             alert("Parameter lag must be larger than 0!");
             document.myForm.lag.focus();
             return false;

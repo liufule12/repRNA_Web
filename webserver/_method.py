@@ -125,7 +125,7 @@ def write_form_file(receive_data, filename, write_path, k, lamada, alphabet):
             lines = f.readlines()
     with open(write_path, 'w') as f:
         count_seq = 0
-        len_seq = lamada  # Avoid the length of first seq is less than lamada.
+        len_seq = lamada + k + 1  # Avoid the length of first seq is less than lamada.
         first_is_seq = True
         need_newline = False
         has_seq = True
@@ -144,9 +144,12 @@ def write_form_file(receive_data, filename, write_path, k, lamada, alphabet):
                 # If the sequence is not follow the >, then error!
                 if not has_seq:
                     return False, "Error, the sequence " + str(count_seq - 1) + " has not sequence."
-                # If the length of sequence is less than lamada, then error!
-                if len_seq < lamada:
-                    return False, "Error, the sequence " + str(count_seq - 1) + " parameter must be less than L-k, where L is the length of the query sequence and k is the length of the selected oligomer mode."
+                # If (the length of sequence - k) is less than lamada, then error!
+                if len_seq - k < lamada:
+                    return False, "Error, the sequence " + str(
+                        count_seq - 1) + " parameter lamada must be less than and equal to L-" + str(
+                        k) + " where L is the length of the query sequence and " + str(
+                        k) + " is the length of the selected oligomer mode."
                 if need_newline:
                     f.write('\n')
                 need_newline = True
@@ -168,18 +171,17 @@ def write_form_file(receive_data, filename, write_path, k, lamada, alphabet):
             len_seq += len(e)
             f.write(e)
 
-        # If the last sequence is not follow the >, then error!
+        # Check the last sequence.
         if not has_seq:
-            return False, "Error, the sequence " + str(count_seq) + " has not sequence."
+            return False, "Error, the last sequence has not sequence."
+        if len_seq - k < lamada:
+            return False, "Error, the last sequence parameter lamada must be less than and equal to L-" + str(
+                k) + " where L is the length of the query sequence and " + str(
+                k) + " is the length of the selected oligomer mode."
+
         # If there are only a sequence, but no >, then error!
         if count_seq < 1:
-            return False, "Error, the sequence " + str(count_seq + 1) + " has not sequence name."
-        # len_seq must be >= k.
-        if len_seq < k:
-            return False, "Error, the sequence " + str(count_seq) + " must be larger and equal to k, where k is the length of the selected oligomer mode."
-        # If the length of sequence is less than lamada, then error!
-        if len_seq < lamada:
-            return False, "Error, the sequence " + str(count_seq) + " parameter must be less than L-k, where L is the length of the query sequence and k is the length of the selected oligomer mode."
+            return False, "Error, the only sequence has not sequence name."
         # PseSSC seq count must be less than 50.
         if (alphabet == const.ALPHABET_RNA) and count_seq > const.MAX_SEQ_NUM:
             return False, "Error, the sequence number must be less than " + str(const.MAX_SEQ_NUM) + "."
