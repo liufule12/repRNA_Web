@@ -13,5 +13,12 @@
 {% endblock %}
 
 {% block content %}
-    <p>This is a page.</p>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            Download
+        </div>
+        <div class="panel-body">
+            <p><a href="{{ url_for('static', filename="download/physicochemical_property_indices.xlsx") }}">physicochemical_property_indices.xlsx</a> -- The 22 physicochemical indices for dinucleotides.</p>
+        </div>
+    </div>
 {% endblock %}
