@@ -145,7 +145,7 @@ def write_form_file(receive_data, filename, write_path, k, lamada, alphabet):
                 if len_seq - k < lamada:
                     return False, "Parameter lambda error!", "The sequence " + str(
                         count_seq - 1) + ": parameter lambda must be less than and equal to L-" + str(
-                        k) + " where L is the length of the query sequence and " + str(
+                        k) + ", where L is the length of the query sequence and " + str(
                         k) + " is the length of the selected oligomer mode."
                 if need_newline:
                     f.write('\n')
@@ -175,7 +175,7 @@ def write_form_file(receive_data, filename, write_path, k, lamada, alphabet):
             return False, "Sequence error!", "The last sequence has not sequence."
         if len_seq - k < lamada:
             return False, "Sequence error!", "The last sequence: parameter lamada must be less than and equal to L-" + \
-                str(k) + " where L is the length of the query sequence and " + \
+                str(k) + ", where L is the length of the query sequence and " + \
                 str(k) + " is the length of the selected oligomer mode."
 
         # If there are only a sequence, but no >, then error!
