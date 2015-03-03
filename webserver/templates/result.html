@@ -25,7 +25,7 @@
     {% else %}
         <div class="alert alert-success alert-dismissible fade in" role="alert">
             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-            <p><strong>Congratulation!</strong> The parameter summary and results are as follows. &nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-default" onclick="window.history.back()">Back</button></p>
+            <p>Congratulations! The calculation is complete. &nbsp;&nbsp;&nbsp;&nbsp;<button type="button" class="btn btn-default" onclick="window.history.back()">Back</button></p>
         </div>
 
         <!-- Parameter summary -->
@@ -137,38 +137,34 @@
 
             <div class="panel-collapse collapse in" id="collapseRes">
                 <div class="panel-body">
-                    <p><strong>Note</strong>: The black numbers represent the values of the sequence compositions (i.e. amino acid, nucleotide, dinucleotide, or trinucleotide, etc), while the red numbers represent the values of sequence order correlation.</p>
+                    <p><strong>Note</strong>: The numbers represent the feature values, and the bold numbers indicate the feature values of sequence order correlation.</p>
                 </div>
             </div>
 
             <!-- Result vectors -->
             <div class="panel panel-success">
                 {% for vec in res %}
-                    <div class="panel-heading col-sm-12" style="padding: 0;">
-                        <a class="panel-title btn btn-sm col-sm-8" data-toggle="collapse" href="#collapseRes{{ loop.index }}" aria-expanded="true" aria-controls="collapseRes{{ loop.index }}">
-                            <h5 class="text-left">
-                                {{ loop.index }}.
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                >{{ names[loop.index0] }}
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                Dimensions: {{ vec|length }}
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                            </h5>
+                    <div class="panel-heading" style="padding: 0;">
+                        <a class="panel-title btn btn-sm" data-toggle="collapse" href="#collapseRes{{ loop.index }}" aria-expanded="true" aria-controls="collapseRes{{ loop.index }}">
+                            <span class="glyphicon glyphicon-collapse-up"></span> {{ loop.index }}.
                         </a>
+                        >{{ names[loop.index0] }}
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        Dimensions: {{ vec|length }}
+                        &nbsp;&nbsp;&nbsp;&nbsp;
 
                         {% if mode == 'Triplet' or mode == 'PseSSC' or mode == 'PseDPC' %}
-                            <a class="btn btn-default btn-sm col-sm-2" href="http://219.223.247.165:5000/vis/structure/{{ user_ip_time }}/{{ loop.index0 }}" target="_blank">
+                            <a class="btn  btn-sm btn-default" href="http://219.223.247.165:5000/vis/structure/{{ user_ip_time }}/{{ loop.index0 }}" target="_blank">
                                 <span class="glyphicon glyphicon-eye-open"> Secondary structure</span>
                             </a>
-                            <a class="btn btn-default btn-sm col-sm-2" href="http://219.223.247.165:5000/vis/feature/{{ user_ip_time }}/{{ loop.index0 }}" target="_blank">
+                            <a class="btn  btn-sm btn-default" href="http://219.223.247.165:5000/vis/feature/{{ user_ip_time }}/{{ loop.index0 }}" target="_blank">
                                 <span class="glyphicon glyphicon-eye-open"> Feature vector</span>
                             </a>
                         {% else %}
-                            <a class="btn btn-default btn-sm col-sm-offset-2 col-sm-2" href="http://219.223.247.165:5000/vis/feature/{{ user_ip_time }}/{{ loop.index0 }}" target="_blank">
+                            <a class="btn  btn-sm btn-default" href="http://219.223.247.165:5000/vis/feature/{{ user_ip_time }}/{{ loop.index0 }}" target="_blank">
                                 <span class="glyphicon glyphicon-eye-open"> Feature vector</span>
                             </a>
                         {% endif %}
-
                     </div>
 
                     <div class="panel-collapse collapse in" id="collapseRes{{ loop.index }}">
