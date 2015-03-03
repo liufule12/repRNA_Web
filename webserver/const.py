@@ -4,12 +4,12 @@ import os
 
 ARGS = ['rec_data', 'mode', 'k', 'd', 'n', 'lamada', 'lag', 'w']
 
-METHODS_KMER = ['Nucleotide composition', 'Dinucleotide composition', 'Trinucleotide composition',
+METHODS_KMER = ['Mononucleotide composition', 'Dinucleotide composition', 'Trinucleotide composition',
                 'Tetranucleotide composition', 'Pentanucleotide composition', 'Hexanucleotide composition']
-METHODS_PHYCHE_INDEX = ['Auto covariance', 'Cross covariance', 'Auto-cross covariance', 'PC-PseDNC', 'SC-PseDNC']
+METHODS_PHYCHE_INDEX = ['Auto covariance', 'Cross covariance', 'Auto-cross covariance', 'pPseDNC', 'sPseDNC']
 METHODS_LAG = ['Auto covariance', 'Cross covariance', 'Auto-cross covariance']
-METHODS_LAMADA_W = ['PseSSC', 'PseDPC', 'PC-PseDNC', 'SC-PseDNC']
-METHODS_PSE = ['PC-PseDNC', 'SC-PseDNC']
+METHODS_LAMADA_W = ['PseSSC', 'PseDPC', 'pPseDNC', 'sPseDNC']
+METHODS_PSE = ['pPseDNC', 'sPseDNC']
 METHODS_ACC = ['Auto covariance', 'Cross covariance', 'Auto-cross covariance']
 METHODS_STRUCTURE = ['PseSSC', 'PseDPC']
 

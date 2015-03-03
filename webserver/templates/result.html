@@ -182,7 +182,7 @@
                                             <tr>
                                         {% endif %}
                                         {% if 'lamada' in args %}
-                                            {% if mode == 'PC-PseDNC' or mode == 'SC-PseDNC' or mode == 'PseSSC' or mode == 'PseDPC' %}
+                                            {% if mode == 'pPseDNC' or mode == 'sPseDNC' or mode == 'PseSSC' or mode == 'PseDPC' %}
                                                 {% if loop.index0 >= (vec|length) - args['lamada'] %}
                                                     <td><strong>{{ _res }}</strong></td>
                                                 {% else %}

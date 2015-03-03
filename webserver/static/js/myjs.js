@@ -75,7 +75,7 @@ function formCheckArgs(mode)
         }
 
     // Check parameter λ, w.
-    if (mode == "PseSSC" || mode == "PseDPC" || mode == "PC-PseDNC" || mode == "SC-PseDNC"){
+    if (mode == "PseSSC" || mode == "PseDPC" || mode == "pPseDNC" || mode == "sPseDNC"){
         if (document.myForm.lamada.value == ""){
             alert("Please input the parameter λ!");
             document.myForm.lamada.focus();
@@ -117,7 +117,7 @@ function formCheckArgs(mode)
     }
 
     // Physicochemical properties and index file cannot be both null.
-    if (mode == "Auto covariance" || mode == "Cross covariance" || mode == "Auto-cross covariance" || mode == "PC-PseDNC" || mode == "SC-PseDNC"){
+    if (mode == "Auto covariance" || mode == "Cross covariance" || mode == "Auto-cross covariance" || mode == "pPseDNC" || mode == "sPseDNC"){
         if (document.getElementById("upload_ind").value == ""){
             var checked = false;
             var indices = document.getElementsByTagName("input");
@@ -154,7 +154,7 @@ function formCheckArgs(mode)
 
 
 function setAutoForm(mode){
-    if(mode == "Auto covariance" || mode == "Cross covariance" || mode == "Auto-cross covariance" || mode == "PC-PseDNC" || mode == "SC-PseDNC"){
+    if(mode == "Auto covariance" || mode == "Cross covariance" || mode == "Auto-cross covariance" || mode == "pPseDNC" || mode == "sPseDNC"){
         var indices = document.getElementsByTagName("input");
         for (var i = 0; i < indices.length; i++){
             if (indices[i].type == "checkbox"){

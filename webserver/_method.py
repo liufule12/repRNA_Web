@@ -39,7 +39,7 @@ def tran_args(form, mode):
     args = {}
 
     # Transform k.
-    if mode == 'Nucleotide composition':
+    if mode == 'Mononucleotide composition':
         args['k'] = 1
     elif mode == 'Dinucleotide composition':
         args['k'] = 2
@@ -208,12 +208,12 @@ def pse_process(method, args, input_file, ind_file, bracket_file, matched_file, 
 
         return acc(input_data=open(input_file), k=args['k'], lag=args['lag'],
                    phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA, theta_type=3)
-    elif method == 'PC-PseDNC':
+    elif method == 'pPseDNC':
         from pseALL.pse import pseknc
 
         return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],
                       phyche_list=args['props'], extra_index_file=ind_file, alphabet=const.ALPHABET_RNA)
-    elif method == 'SC-PseDNC':
+    elif method == 'sPseDNC':
         from pseALL.pse import pseknc
 
         return pseknc(input_data=open(input_file), k=args['k'], w=args['w'], lamada=args['lamada'],

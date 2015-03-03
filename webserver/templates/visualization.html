@@ -49,7 +49,7 @@
                             <tr>
                         {% endif %}
                         {% if 'lamada' in args %}
-                            {% if args['mode'] == 'PC-PseDNC' or args['mode'] == 'SC-PseDNC' or args['mode'] == 'PseSSC' or args['mode'] == 'PseDPC' %}
+                            {% if args['mode'] == 'pPseDNC' or args['mode'] == 'sPseDNC' or args['mode'] == 'PseSSC' or args['mode'] == 'PseDPC' %}
                                 {% if loop.index0 >= (vec|length) - args['lamada']  %}
                                     <td><strong>{{ _res }}</strong></td>
                                 {% else %}

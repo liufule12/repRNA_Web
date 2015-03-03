@@ -32,7 +32,7 @@
                                 {{ mode }} <span class="caret"></span>
                             </button>
                             <ul class="dropdown-menu" role="menu">
-                                <li><a href="/RNA/Nucleotide composition/">Nucleotide composition</a></li>
+                                <li><a href="/RNA/Mononucleotide composition/">Mononucleotide composition</a></li>
                                 <li><a href="/RNA/Dinucleotide composition/">Dinucleotide composition</a></li>
                                 <li><a href="/RNA/Trinucleotide composition/">Trinucleotide composition</a></li>
                                 <li><a href="/RNA/Tetranucleotide composition/">Tetranucleotide composition</a></li>
@@ -47,8 +47,8 @@
                                 <li><a href="/RNA/PseSSC/">PseSSC</a></li>
                                 <li><a href="/RNA/PseDPC/">PseDPC</a></li>
                                 <li role="presentation" class="divider"></li>
-                                <li><a href="/RNA/PC-PseDNC/">PC-PseDNC</a></li>
-                                <li><a href="/RNA/SC-PseDNC/">SC-PseDNC</a></li>
+                                <li><a href="/RNA/pPseDNC/">pPseDNC</a></li>
+                                <li><a href="/RNA/sPseDNC/">sPseDNC</a></li>
                             </ul>
                         </div>
                     </div>
@@ -115,7 +115,7 @@
                     {% endif %}
 
                     <!-- Parameter: lamada -->
-                    {% if mode == 'PseSSC' or mode == 'PseDPC' or mode == 'PC-PseDNC' or mode == 'SC-PseDNC' %}
+                    {% if mode == 'PseSSC' or mode == 'PseDPC' or mode == 'pPseDNC' or mode == 'sPseDNC' %}
                         <div class="form-group">
                             <label class="col-sm-2 text-left">
                                 {% if mode == 'PseSSC' %}
@@ -137,7 +137,7 @@
                     {% endif %}
 
                     <!-- Parameter: w -->
-                    {% if mode == 'PseSSC' or mode == 'PseDPC' or mode == 'PC-PseDNC' or mode == 'SC-PseDNC' %}
+                    {% if mode == 'PseSSC' or mode == 'PseDPC' or mode == 'pPseDNC' or mode == 'sPseDNC' %}
                         <div class="form-group">
                             <label class="col-sm-2 text-left">
                                 {% if mode == 'PseSSC' or mode == 'PseDPC' %}
@@ -157,7 +157,7 @@
                     {% endif %}
 
                     <!-- Parameter: phyche_index -->
-                    {% if mode == 'Auto covariance' or mode == 'Cross covariance' or mode == 'Auto-cross covariance' or mode == 'PC-PseDNC' or mode == 'SC-PseDNC' %}
+                    {% if mode == 'Auto covariance' or mode == 'Cross covariance' or mode == 'Auto-cross covariance' or mode == 'pPseDNC' or mode == 'sPseDNC' %}
                         <div class="form-group">
                             <label class="col-sm-1 text-left"><em>Physicochemical properties</em>:</label>
                             <div class="col-sm-offset-1 col-sm-10 table-responsive">
