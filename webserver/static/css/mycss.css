@@ -1,6 +1,16 @@
 .jumbotron
 {
-    background-image: url('../pic/background.jpg');
     background-size: cover;
-    background-repeat: no-repeat;
+    background: url('../pic/background.jpg') no-repeat;
+    padding: 0;
+    margin: 5px 0;
+}
+
+.container .jumbotron{
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.jumbotron h1{
+    font-size: 50px;
 }
