@@ -53,7 +53,7 @@
                         </div>
                     </div>
 
-                    <!-- Parameter: n -->
+                    <!-- Parameter: n (PseSSC)-->
                     {% if mode == 'PseSSC' %}
                         <div class="form-group">
                             <label class="col-sm-2 text-left">
@@ -65,34 +65,34 @@
                             </label>
                             <div class="col-sm-2">
                                 <select class="form-control" name="n">
-                                    <option>1</option>
-                                    <option selected>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
+                                    <option value="1">1</option>
+                                    <option value="2" selected>2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
                                 </select>
                             </div>
                         </div>
                     {% endif %}
 
-                    <!-- Parameter: d -->
+                    <!-- Parameter: n (PseDPC)-->
                     {% if mode == 'PseDPC' %}
                         <div class="form-group">
                             <label class="col-sm-2 text-left">
                                 <a id="tooltip_d" data-toggle="tooltip" data-placement="left" title="d reflects the local or short-range structure status order effects">
-                                    <em>d </em>
+                                    <em>n </em>
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </a>
                                 :
                             </label>
                             <div class="col-sm-2">
-                                <select class="form-control" name="d">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option selected>7</option>
+                                <select class="form-control" name="n">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option  value="7" selected>7</option>
                                 </select>
                             </div>
                         </div>

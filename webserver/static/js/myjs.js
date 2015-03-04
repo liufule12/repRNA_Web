@@ -175,7 +175,7 @@ function setAutoForm(mode){
         document.forms[0].lamada.value = 13;
         document.forms[0].w.value = 0.5;
     }else if (mode == "PseDPC"){
-        document.forms[0].d.value = 7;
+        document.forms[0].n.value = 7;
         document.forms[0].lamada.value = 15;
         document.forms[0].w.value = 1;
     }

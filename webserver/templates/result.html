@@ -51,16 +51,9 @@
                             </div>
                         {% endif %}
 
-                        {% if mode == 'PseSSC' %}
+                        {% if mode == 'PseSSC' or mode == 'PseDPC' %}
                             <div class="row">
                                 <label class="col-sm-2"><i>n</i> :</label>
-                                <p class="col-sm-2">{{ args['k'] }}</p>
-                            </div>
-                        {% endif %}
-
-                        {% if mode == 'PseDPC' %}
-                            <div class="row">
-                                <label class="col-sm-2"><i>d</i> :</label>
                                 <p class="col-sm-2">{{ args['k'] }}</p>
                             </div>
                         {% endif %}

@@ -51,10 +51,8 @@ def tran_args(form, mode):
         args['k'] = 5
     elif mode == 'Hexanucleotide composition':
         args['k'] = 6
-    elif mode == 'PseSSC':
+    elif mode == 'PseSSC' or mode == 'PseDPC':
         args['k'] = int(form['n'])
-    elif mode == 'PseDPC':
-        args['k'] = int(form['d'])
 
     if mode in const.METHODS_PHYCHE_INDEX:
         args['k'] = 2
@@ -351,10 +349,8 @@ def write_tab(mode, args, _vecs, vecs_name, write_file):
         f.write("Data type: RNA sequences\n")
         f.write("Mode: " + mode + '\n')
         if 'k' in args:
-            if mode == 'PseSSC':
+            if mode == 'PseSSC' or mode == 'PseDPC':
                 f.write('N: ' + str(args['k']) + '\n')
-            elif mode == 'PseDPC':
-                f.write('D: ' + str(args['k']) + '\n')
             else:
                 f.write('K: ' + str(args['k']) + '\n')
         if args['props']:
