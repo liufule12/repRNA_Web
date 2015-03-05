@@ -1,7 +1,8 @@
 .jumbotron
 {
     background-size: cover;
-    background: url('../pic/background.jpg') no-repeat;
+    /*background: url('../pic/background.jpg');*/
+    background: no-repeat;
     padding: 0;
     margin: 5px 0;
 }
@@ -12,5 +13,9 @@
 }
 
 .jumbotron h1{
-    font-size: 46px;
+    font-size: 50px;
+}
+
+.navbar-default .navbar-nav>li>a{
+    color: #428bca;
 }
