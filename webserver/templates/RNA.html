@@ -22,8 +22,9 @@
                     <!-- Parameter: mode -->
                     <div class="form-group" >
                         <label class="col-sm-2 text-left">
-                            <a id="tooltip_mode" data-toggle="tooltip" data-placement="left" title="The repRNA is able to generate totally 9 different modes for RNA data">
-                                <em>Mode </em><span class="glyphicon glyphicon-question-sign"></span>
+                            <em>Mode </em>
+                            <a href="" onclick="alert('The repRNA is able to generate totally 9 different modes for RNA data.')">
+                                <span class="glyphicon glyphicon-question-sign"></span>
                             </a>
                             :
                         </label>
@@ -57,8 +58,8 @@
                     {% if mode == 'PseSSC' %}
                         <div class="form-group">
                             <label class="col-sm-2 text-left">
-                                <a id="tooltip_n" data-toggle="tooltip" data-placement="left" title="n reflects the local or short-range structure-order effect">
-                                    <em>n</em>
+                                <em>n</em>
+                                <a href="" onclick="alert('n reflects the local or short-range structure-order effect.')">
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </a>
                                 :
@@ -78,8 +79,8 @@
                     {% if mode == 'PseDPC' %}
                         <div class="form-group">
                             <label class="col-sm-2 text-left">
-                                <a id="tooltip_d" data-toggle="tooltip" data-placement="left" title="d reflects the local or short-range structure status order effects">
-                                    <em>n </em>
+                                <em>n </em>
+                                <a href="" onclick="alert('d reflects the local or short-range structure status order effects.')">
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </a>
                                 :
@@ -102,8 +103,8 @@
                     {% if mode == 'Auto covariance' or mode == 'Cross covariance' or mode == 'Auto-cross covariance' %}
                         <div class="form-group">
                             <label class="col-sm-2 text-left">
-                                <a id="tooltip_lag" data-toggle="tooltip" data-placement="left" title="lag represents the distance between two oligomers along a RNA sequence">
-                                    <em>lag </em>
+                                <em>lag </em>
+                                <a href="" onclick="alert('lag represents the distance between two oligomers along a RNA sequence.')">
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </a>
                                 :
@@ -118,14 +119,14 @@
                     {% if mode == 'PseSSC' or mode == 'PseDPC' or mode == 'pPseDNC' or mode == 'sPseDNC' %}
                         <div class="form-group">
                             <label class="col-sm-2 text-left">
+                                <em>λ</em>
                                 {% if mode == 'PseSSC' %}
-                                    <a id="tooltip_lamada" data-toggle="tooltip" data-placement="left" title="λ reflects the global or long-range structure‐order effect">
+                                    <a href="" onclick="alert('λ reflects the global or long-range structure‐order effect.')">
                                 {% elif mode == 'PseDPC' %}
-                                    <a id="tooltip_lamada" data-toggle="tooltip" data-placement="left" title="λ reflects the global or long-range structure status order effect">
+                                    <a href="" onclick="alert('λ reflects the global or long-range structure status order effect.')">
                                 {% else %}
-                                    <a id="tooltip_lamada" data-toggle="tooltip" data-placement="left" title="λ is an integer, representing the highest counted rank (or tier) of the correlation along a RNA sequence">
+                                    <a href="" onclick="alert('λ is an integer, representing the highest counted rank (or tier) of the correlation along a RNA sequence.')">
                                 {% endif %}
-                                    <em>λ</em>
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </a>
                                 :
@@ -140,12 +141,12 @@
                     {% if mode == 'PseSSC' or mode == 'PseDPC' or mode == 'pPseDNC' or mode == 'sPseDNC' %}
                         <div class="form-group">
                             <label class="col-sm-2 text-left">
+                                <em>w</em>
                                 {% if mode == 'PseSSC' or mode == 'PseDPC' %}
-                                    <a id="tooltip_w" data-toggle="tooltip" data-placement="left" title="w is the factor to adjust the weight between the local and global effects">
+                                    <a href="" onclick="alert('w is the factor to adjust the weight between the local and global effects.')">
                                 {% else %}
-                                    <a id="tooltip_w" data-toggle="tooltip" data-placement="left" title="w is the weight factor ranging from 0 to 1">
+                                    <a href="" onclick="alert('w is the weight factor ranging from 0 to 1.')">
                                 {% endif %}
-                                    <em>w</em>
                                     <span class="glyphicon glyphicon-question-sign"></span>
                                 </a>
                                 :
@@ -224,17 +225,6 @@
                     <button type="reset" class="btn btn-primary btn-lg"><span class="glyphicon glyphicon-remove"></span> Reset</button>
                     <button type="button" class="btn btn-primary btn-lg" onclick="setAutoForm('{{ mode }}')">Example</button>
                 </form>
-
-                <!-- tooltip init. -->
-                <script type="text/javascript">
-                    $('#tooltip_mode').tooltip();
-                    $('#tooltip_k').tooltip();
-                    $('#tooltip_n').tooltip();
-                    $('#tooltip_d').tooltip();
-                    $('#tooltip_lag').tooltip();
-                    $('#tooltip_lamada').tooltip();
-                    $('#tooltip_w').tooltip();
-                </script>
             </div>
         </div>
     </div>
